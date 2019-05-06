@@ -1,0 +1,51 @@
+*
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+.clearfix::after 
+    +float-fix(block)
+    
+body 
+    font-family: $main-font
+    height: 50vh * 2
+    background-image: url("../img/background.jpg")
+
+header 
+  background-color: #ddd
+  figure.logo 
+    float: left
+    width: 25%
+    img 
+      width: 330px
+  nav 
+    float: left
+    width: calc(100% - 25%)
+    text-align: right
+    ul 
+        font-size: 0
+        list-style-type: none    
+        li 
+        display: inline-block
+        a 
+            display: block
+            padding: 20px
+            font-size: 16px
+            text-decoration: none
+            color: #555
+            &:hover 
+             color: black    
+
+
+
+
+
+
+
+
+
+
+
+
+
+

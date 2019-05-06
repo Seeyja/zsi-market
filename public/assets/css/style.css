@@ -1,0 +1,61 @@
+:root {
+  --main-color: #E4954D;
+  --second-color: #3c93ab;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+body {
+  font-family: "Saira", sans-serif;
+  height: 100vh;
+  background-image: url("../img/background.jpg");
+}
+
+header {
+  background-color: #ddd;
+}
+
+header figure.logo {
+  float: left;
+  width: 25%;
+}
+
+header figure.logo img {
+  width: 330px;
+}
+
+header nav {
+  float: left;
+  width: calc(100% - 25%);
+  text-align: right;
+}
+
+header nav ul {
+  font-size: 0;
+  list-style-type: none;
+  display: inline-block;
+}
+
+header nav ul a {
+  display: block;
+  padding: 20px;
+  font-size: 16px;
+  text-decoration: none;
+  color: #555;
+}
+
+header nav ul a:hover {
+  color: black;
+}
+/*# sourceMappingURL=style.css.map */

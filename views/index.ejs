@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<?php require 'connection.php'; ?>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zsi-Market</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:400,700|Saira:400,700&amp;subset=latin-ext"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <script
+      src="http://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="clearfix">
+            <figure class="logo"><img src="img/logo.png" alt="logo"></figure>
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i>Konto</a></li>
+                    <li><a href="#"><i class="fas fa-shopping-cart"></i>Koszyk</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="add_book">
+                <form autocomplete="off" method="post">
+
+                    <div class="row">
+                        <input type="text" placeholder="Login" name="login">
+                        <label>Wybierz klasę</label>
+                        <select name = "class" >
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+
+                        <input type="tel" placeholder="Telefon" name="num">
+                        <input type="email" placeholder="Email" autocomplete="user-password" name="email">
+                    </div>
+                    <div class="row clearfix">
+                        <textarea placeholder="Opis" rows="6" name="description"></textarea>
+                        <fieldset>
+                            <legend>Wybierz przedmioty</legend>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Język polski</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Język angielski</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Język niemiecki</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Historia</label>
+                                <label><input class="items_checkbox animationfix" type="checkbox"><span>P.przedsiębiorczości</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Geografia</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Biologia</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Chemia</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Fizyka</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Matematyka</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"><span>EDB</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Religia</span></label>
+                            <label><input class="items_checkbox animationfix"
+                                    type="checkbox"><span>Przedmioty zawodowe</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"><span>WOS</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"><span>WOK</span></label>
+                        </fieldset>
+                        <div class="inner_row">
+                            <input type="file" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
+                            <label for="file"><span>Dodaj zdjęcia</span></label>
+                            <button type="submit">Dodaj książkę</button>
+                        </div>
+                    </div>
+
+                </form>
+            </section>
+
+            <section class="select_category">
+                <h2>Jakie książki Cię interesują?</h2>
+                <figure class="category"><img src="img/poland.png" alt="">
+                    <figcaption>J.polski</figcaption>
+                </figure>
+                <figure class="category"><img src="img/england.png" alt="">
+                    <figcaption>Język.angielski</figcaption>
+                </figure>
+                <figure class="category"><img src="img/germany.png" alt="">
+                    <figcaption>J.niemiecki</figcaption>
+                </figure>
+                <figure class="category"><img src="img/history.png" alt="">
+                    <figcaption>Historia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/entrepreneurship.png" alt="">
+                    <figcaption>P.przedsiębiorczości</figcaption>
+                </figure>
+                <figure class="category"><img src="img/geography.png" alt="">
+                    <figcaption>Geografia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/biology.png" alt="">
+                    <figcaption>Biologia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/chemistry.png" alt="">
+                    <figcaption>Chemia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/physics.png" alt="">
+                    <figcaption>Fizyka</figcaption>
+                </figure>
+                <figure class="category"><img src="img/maths.png" alt="">
+                    <figcaption>Matematyka</figcaption>
+                </figure>
+                <figure class="category"><img src="img/safety.png" alt="">
+                    <figcaption>EDB</figcaption>
+                </figure>
+                <figure class="category"><img src="img/religion.png" alt="">
+                    <figcaption>Religia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/it.png" alt="">
+                    <figcaption>Przedmioty zawodowe</figcaption>
+                </figure>
+                <figure class="category"><img src="img/society.png" alt="">
+                    <figcaption>WOS</figcaption>
+                </figure>
+                <figure class="category"><img src="img/culture.png" alt="">
+                    <figcaption>WOK</figcaption>
+                </figure>
+            </section>
+            <section class="books">
+                <h2>Wybierz coś dla siebie</h2>
+                <div class="row">
+                    <div><img src="img/background.jpg" alt="">
+                        Użytkownik: Tomek</div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </section>
+        </main>
+        <footer></footer>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
