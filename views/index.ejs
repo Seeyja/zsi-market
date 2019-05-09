@@ -51,34 +51,34 @@
                     </div>
                     <div class="row clearfix">
                         <textarea placeholder="Opis" rows="6" name="description"></textarea>
-                        <fieldset>
+                        <fieldset name = "book_types">
                             <legend>Wybierz przedmioty</legend>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Język polski</span></label>
+                                    type="checkbox" name="polish"><span>Język polski</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Język angielski</span></label>
+                                    type="checkbox" name="english"><span>Język angielski</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Język niemiecki</span></label>
+                                    type="checkbox" name="german"><span>Język niemiecki</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Historia</label>
-                                <label><input class="items_checkbox animationfix" type="checkbox"><span>P.przedsiębiorczości</span></label>
+                                    type="checkbox" name="history"><span>Historia</label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="entrepreneurship"><span>P.przedsiębiorczości</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Geografia</span></label>
+                                    type="checkbox" name="geography"><span>Geografia</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Biologia</span></label>
+                                    type="checkbox" name="biology"><span>Biologia</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Chemia</span></label>
+                                    type="checkbox" name="chemistry"><span>Chemia</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Fizyka</span></label>
+                                    type="checkbox" name="physics"><span>Fizyka</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Matematyka</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox"><span>EDB</span></label>
+                                    type="checkbox" name="math"><span>Matematyka</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox" name="safety"><span>EDB</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Religia</span></label>
+                                    type="checkbox" name="religion"><span>Religia</span></label>
                             <label><input class="items_checkbox animationfix"
-                                    type="checkbox"><span>Przedmioty zawodowe</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox"><span>WOS</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox"><span>WOK</span></label>
+                                    type="checkbox" name="professionalCourses"><span>Przedmioty zawodowe</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox" name="society"><span>WOS</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox" name="culture"><span>WOK</span></label>
                         </fieldset>
                         <div class="inner_row">
                             <input type="file" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
@@ -145,12 +145,23 @@
                         Użytkownik: Tomek</div>
                     <div></div>
                     <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </section>
         </main>
         <footer></footer>
     </div>
     <script src="js/main.js"></script>
+    <script>
+    <% if( typeof hint !== 'undefined' ){ %>
+       let expor = " <%=hint%> ";
+       alert( expor );
+    <% } %>
+    </script>
+
+
+    </script>
 </body>
 
 </html>
