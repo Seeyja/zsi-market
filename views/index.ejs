@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -155,8 +154,11 @@
     <script src="js/main.js"></script>
     <script>
     <% if( typeof hint !== 'undefined' ){ %>
-       let expor = " <%=hint%> ";
-       alert( expor );
+       let hint = " <%=hint%> ";
+       let passCode = prompt( hint );
+       if(passCode === "<%= entryCode %>")
+         alert('Correct entry code!');
+       else alert('Wrong entry code!');
     <% } %>
     </script>
 
