@@ -62,8 +62,11 @@ module.exports = function(app) {
         let sql3 = `SELECT id, code FROM users WHERE username = "${userData.username}" OR num = "${userData.num}" OR email="${userData.email}"`;
         let query3 = db.query(sql3, (err, results)=>{
             if(err) throw err;
-            offerData.user_id = results[0].id;
-            entryCode = results[0].code
+            if (results.length > 0) {
+              offerData.user_id = results[0].id;
+              entryCode = results[0].code
+            }
+
         });
 
 
@@ -95,21 +98,27 @@ module.exports = function(app) {
               console.log(result);
             });
 
-            res.render( 'index', {hint: 'User and offer added...', alreadyUser:0} );
+            res.render( 'index', {hint: 'User and offer added...'} );
 
         }
-        //Add offer to existing user
+        //Add offer to existing user if he passed correct accessCode
+        else if (req.body.accessCode !== 'undefined' ) {
+          if(req.body.accessCode === results[0].code){
+            console.log('ITS ALIVE :O');
+            let sql3 = 'INSERT INTO offers SET ?';
+            let query3 = db.query(sql3, offerData, (err, result)=>{
+              if(err) throw err;
+              console.log(result);
+            });
+            res.render( 'index', {hint: 'Offer added to existing user'} );
+          }
+          else {
+            res.render( 'login', {hint: 'Wrong access Code!', keepData: userData} );
+          }
+        }
+        //Else head him to passing code
         else{
-          res.render( 'index', {hint: 'There is already user like that! Enter your code:', alreadyUser:1 , entryCode: entryCode } );
-          console.log('ITS ALIVE :O');
-
-          //offer
-          let sql2 = 'INSERT INTO offers SET ?';
-          let query2 = db.query(sql2, offerData, (err, result)=>{
-            if(err) throw err;
-            console.log(result);
-          });
-
+          res.render( 'login', {hint: 'There is already user like that! Enter your code:', entryCode: entryCode, keepData: userData} );
         }
     });
 
