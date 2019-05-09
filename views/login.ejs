@@ -36,7 +36,8 @@
                 <form autocomplete="off" method="post">
 
                     <div class="row">
-                        <input type="text" placeholder="Login" name="login">
+                        <input type="text" placeholder="Login" name="login" value="<%= keepData.username %>">
+                        <input type="text" placeholder="AccessCode" name="accessCode">
                         <label>Wybierz klasę</label>
                         <select name = "class" >
                             <option value="1">1</option>
@@ -45,8 +46,8 @@
                             <option value="4">4</option>
                         </select>
 
-                        <input type="tel" placeholder="Telefon" name="num">
-                        <input type="email" placeholder="Email" autocomplete="user-password" name="email">
+                        <input type="tel" placeholder="Telefon" name="num" value="<%= keepData.num %>">
+                        <input type="email" placeholder="Email" autocomplete="user-password" name="email" value="<%= keepData.email %>">
                     </div>
                     <div class="row clearfix">
                         <textarea placeholder="Opis" rows="6" name="description"></textarea>
