@@ -57,11 +57,6 @@ module.exports = function(app) {
           description: req.body.description,
           active: 0,
         };
-        //Custom
-        //let setData = {
-        //  offer_id: ,
-        //  book_type_id: ,
-        //}
 
         let entryCode;
         // Look for user_id for offers table
@@ -86,67 +81,60 @@ module.exports = function(app) {
             let sql = 'INSERT INTO users SET ?';
             let query = db.query(sql, userData, (err, result)=>{
               if(err) throw err;
-              //console.log(result);
+              offerData.user_id = result.insertId;
+
+              let sql2 = 'INSERT INTO offers SET ?';
+              let query2 = db.query(sql2, offerData, (err, result)=>{
+                if(err) throw err;
+                //console.log(result);
+                setData.offer_id = result.insertId;
+              });
+              for (subject in book_types){
+
+                if(typeof book_types[subject]!=='undefined'){
+                  //console.log(subject);
+                  let sql3 = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
+                  let query3 = db.query(sql3, (err, results)=>{
+                    if(err) throw err;
+                    //console.log(results);
+                    //console.log("Strange thing:");
+                    //console.log(subject);
+                    setData.book_type_id = results[0].id;
+                    //console.log(setData);
+
+                    let sql4 = 'INSERT INTO sets SET ?';
+                    let query4 = db.query(sql4, setData , (err, results)=>{
+                      if(err) throw err;
+                    });
+                  });
+                }
+              }
             });
             //insert offer
-            let offId;// For set inserting
-            let sql2 = 'INSERT INTO offers SET ?';
-            let query2 = db.query(sql2, offerData, (err, result)=>{
-              if(err) throw err;
-              //console.log(result);
-              setData.offer_id = result.insertId;
-            });
-
-            let bookType_id;
-
             // Insert sets by "for in loop"
-            for (subject in book_types){
-
-              if(typeof book_types[subject]!=='undefined'){
-                console.log(subject);
-
-                let sql3 = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
-                let query3 = db.query(sql3, (err, results)=>{
-                  if(err) throw err;
-                  //console.log(results);
-                  console.log("Strange thing:");
-                  console.log(subject);
-                  setData.book_type_id = results[0].id;
-                  console.log(setData);
-
-                  let sql4 = 'INSERT INTO sets SET ?';
-                  let query4 = db.query(sql4, setData , (err, results)=>{
-                    if(err) throw err;
-                    console.log("Strange thing2:");
-                    console.log(subject);
-                  });
-                });
-              }
-            }
-
-
-
 
             res.render( 'index', {hint: 'User and offer added...'} );
-
         }
         //Add offer to existing user if he passed correct accessCode
         else if (typeof req.body.accessCode !== 'undefined' ) {
           if(req.body.accessCode === results[0].code){
             console.log('ITS ALIVE :O');
+
             let sql3 = 'INSERT INTO offers SET ?';
             let query3 = db.query(sql3, offerData, (err, result)=>{
               if(err) throw err;
               console.log(result);
             });
+
             res.render( 'index', {hint: 'Offer added to existing user'} );
           }
+          //If passed wrong code
           else {
             keepData.description = offerData.description;
             res.render( 'login', {hint: 'Wrong access Code!', keepData: userData, keepDescription: offerData.description} );
           }
         }
-        //Else head him to pass code
+        //If didnt pass code yet head him to pass code
         else{
           res.render( 'login', {hint: 'There is already user like that! Enter your code:', entryCode: entryCode, keepData: userData, keepDescription: offerData.description} );
         }
