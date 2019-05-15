@@ -79,6 +79,7 @@ main .add_book form .row:nth-child(2) {
     padding: 0 10px;
 }
 
+input[type=number],
 input[type=text],
 input[type=tel],
 input[type=email],
@@ -94,7 +95,6 @@ input[type=file]+label {
     background-size: 24px 24px;
     background-position: 5px 5px;
     font-family: var(--main-font);
-
 }
 
 input[type=text] {
@@ -128,11 +128,13 @@ fieldset {
     text-align: left;
 }
 
-fieldset legend {
+fieldset legend,
+fieldset+span {
     color: var(--second-color);
     font-family: 'Saira extra Condensed', sans-serif;
     font-weight: 600;
     text-align: center;
+    letter-spacing: 1px;
 }
 
 fieldset label {
@@ -218,8 +220,36 @@ fieldset label span {
 .add_book .row .inner_row {
     float: left;
     width: 18%;
-    margin-top: 50px;
+    margin-top: 20px;
+    padding-right: 10px;
 }
+
+/*RANGE STYLE*/
+#input-select,
+#input-number {
+    padding: 5px;
+    margin: 15px 5px 5px;
+    width: 80px;
+}
+
+.noUi-horizontal {
+    height: 10px;
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 30px;
+    height: 30px;
+    left: -17px;
+    top: -10px;
+    border-radius: 50%;
+    outline: 0;
+}
+
+.noUi-connect {
+    background: #E4954D;
+}
+
+/*RANGE STYLE*/
 
 button {
     margin-top: 30px;
@@ -246,6 +276,9 @@ input[type=file] {
 }
 
 input[type=file]+label {
+    display: inline-block;
+    width: 80%;
+    margin-top: 15px;
     padding: 5px 20px 5px 40px;
     background-image: url(../img/upload.png);
     background-color: #ddd;
@@ -257,6 +290,7 @@ input[type=file]+label:hover {
     background-color: rgb(189, 184, 184);
 }
 
+input[type=number]:focus,
 input[type=text]:focus,
 input[type=tel]:focus,
 input[type=email]:focus,
@@ -289,6 +323,12 @@ main .select_category .category {
     text-align: center;
 }
 
+main .select_category .category img.active {
+    transform: scale(1.2) rotate(360deg);
+    background-color: transparent;
+    border: 2px solid var(--second-color);
+}
+
 main .select_category .category img {
     width: 48px;
     height: 48px;
@@ -296,6 +336,8 @@ main .select_category .category img {
     border: 1px solid black;
     background-color: #E4954D;
     border-radius: 50%;
+    transition: 0.2s;
+    cursor: pointer;
 }
 
 main .books {
@@ -307,15 +349,70 @@ main .books {
     justify-content: space-around;
 }
 
-.books .row div {
-    flex-basis: 25%;
-    min-height: 45vh;
-    background-color: white;
-    border: 2px solid rgb(221, 221, 221);
+.books .row .inner_row {
+    text-align: center;
 }
 
-.books .row div img {
+.books .row button {
+    margin-top: 0;
+    padding: 3px 10px;
+    color: white;
+    font-size: 12px;
+}
+
+.books .row .book .window {
+    padding: 10px;
+    background-color: #ddd;
+
+}
+
+.books .row button:nth-child(2) {
+    background-color: var(--second-color);
+    border-color: #1f697d;
+}
+
+.books .row button:nth-child(3) {
+    background-color: #554D4E;
+    border-color: rgb(70, 62, 63);
+}
+
+.books .row button.active {
+    background-color: transparent;
+    color: black;
+}
+
+.books .row article.book {
+    flex-basis: 18%;
+    border: 1px solid rgb(221, 221, 221);
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.books .row article.book:nth-child(odd) {
+    border-top: 3px solid #E4954D;
+}
+
+.books .row article.book:nth-child(even) {
+    border-top: 3px solid #3C93AB;
+}
+
+.books .row article img {
+    display: block;
     width: 100%;
+}
+
+footer {
+    padding: 20px 0;
+    background-color: #ddd;
+    border-top: 1px solid #b1b1b1;
+    text-align: center;
+}
+
+footer a {
+    padding-left: 5px;
+    color: #0077B5;
+    font-size: 20px;
 }
 
 @keyframes draw_mark {
