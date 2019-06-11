@@ -350,34 +350,34 @@ main .books {
 }
 
 .books .row .inner_row {
+    display: flex;
+    background-color: #DDDDDD;
     text-align: center;
 }
 
 .books .row button {
+    flex-basis: 33.33%;
     margin-top: 0;
     padding: 3px 10px;
-    color: white;
+    border: initial;
+    background-color: #DDDDDD;
     font-size: 12px;
+    font-weight: normal;
+    border-radius: 0px;
 }
 
 .books .row .book .window {
     padding: 10px;
     background-color: #ddd;
-
 }
 
-.books .row button:nth-child(2) {
-    background-color: var(--second-color);
-    border-color: #1f697d;
-}
-
-.books .row button:nth-child(3) {
-    background-color: #554D4E;
-    border-color: rgb(70, 62, 63);
+.books .row .book .window p {
+    animation: fadeEffect .6s;
 }
 
 .books .row button.active {
     background-color: transparent;
+    border-top: 3px solid #3C93AB;
     color: black;
 }
 
@@ -547,5 +547,15 @@ footer a {
     to {
         opacity: 0;
         transform: translate(2em, -12.5em) rotate(100deg);
+    }
+}
+
+@keyframes fadeEffect {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }

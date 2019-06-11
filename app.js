@@ -1,25 +1,31 @@
 const express = require( 'express' );
 const mysql = require( 'mysql' );
 const ejs = require( 'ejs' );
-const bodyParser = require( 'body-parser' );
 const connectionController = require('./controllers/connectionController.js');
+const uploadController = require('./controllers/uploadController.js');
+const bookSearchController = require('./controllers/bookSearchController.js');
 const app = express();
+const multer = require('multer');
+const path = require('path');
 
 // Listen to port 3000
-app.listen(3000);
-console.log('Server started on port 3000');
+app.listen(80);
+console.log('Server started on port 80');
 
 // Set up template Engine
 app.set('view engine', 'ejs');
 
 // Static file access
-app.use( express.static( './public/assets' ) );
-app.use( bodyParser.urlencoded( {extended: true} ) );
+app.use( express.static( './public' ) );
 
 //fire controllers
-connectionController(app);
+uploadController(app);
+bookSearchController(app);
 
 // Route to index
+app.get('/main', function(req, res){
+      res.render('index');
+});
 app.get('/', function(req, res){
       res.render('index');
 });

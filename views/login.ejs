@@ -33,7 +33,7 @@
         </header>
         <main>
             <section class="add_book">
-                <form autocomplete="off" method="post">
+                <form autocomplete="off" method="post" enctype="multipart/form-data">
 
                     <div class="row">
                         <input type="text" placeholder="Login" name="login" value="<%= keepData.username %>">
@@ -81,7 +81,7 @@
                             <label><input class="items_checkbox animationfix" type="checkbox" name="culture"><span>WOK</span></label>
                         </fieldset>
                         <div class="inner_row">
-                            <input type="file" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
+                            <input type="file" name="files" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
                             <label for="file"><span>Dodaj zdjęcia</span></label>
                             <button type="submit">Dodaj książkę</button>
                         </div>
@@ -92,7 +92,7 @@
 
             <section class="select_category">
                 <h2>Jakie książki Cię interesują?</h2>
-                <figure class="category"><img src="img/poland.png" alt="">
+                <figure class="category"><img src="img/poland.png" >
                     <figcaption>J.polski</figcaption>
                 </figure>
                 <figure class="category"><img src="img/england.png" alt="">
@@ -153,12 +153,26 @@
         <footer></footer>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/checkBack.js"></script>
     <script>
     <% if( typeof hint !== 'undefined' ){ %>
        let hint = " <%=hint%> ";
        alert( hint );
 
     <% } %>
+    <%
+    if ( typeof keepBookTypes !== "undefined"){
+      for ( subject in keepBookTypes ){
+
+        if( typeof keepBookTypes[subject] !== 'undefined' ){
+          console.log(subject);
+        %>
+          document.getElementsByName('<%=subject%>')[0].checked = true;
+        <%
+        }//end if undefined
+      }//end for in
+    }//end
+    %>
     </script>
 </body>
 
