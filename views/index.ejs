@@ -29,21 +29,24 @@
         </header>
         <main>
             <section class="add_book">
-                <form method="post">
+                <form method="post" enctype = "multipart/form-data" action="main">
 
                     <div class="row">
-                        <input type="text" placeholder="Użytkownik" name="login" autocomplete="user-password">
-                        <select name="class">
+                        <input required type="text" placeholder="Użytkownik" name="login" autocomplete="user-password">
+                        <select required name="class">
+                            <option value="">Wybierz klasę</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
-                        <input type="tel" placeholder="Telefon" name="num" autocomplete="user-password"> <span>||</span>
-                        <input type="email" placeholder="Email" autocomplete="user-password" name="email">
+                        <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}" required type="tel" placeholder="Numer"
+                             name="num">
+                         <span>||</span>
+                         <input required type="email" placeholder="Email" name="email">
                     </div>
                     <div class="row clearfix">
-                        <textarea placeholder="Opis" rows="6" name="description"></textarea>
+                       <textarea maxlength="150" placeholder="Opis" rows="6" name="description"></textarea>
                         <fieldset>
                             <legend>Wybierz przedmioty</legend>
                             <label><input class="items_checkbox animationfix"
@@ -80,7 +83,7 @@
                             <input type="number" id="input-select" min="0" max="100" step="1" id="input-number">
                             <input type="number" min="0" max="100" step="1" id="input-number">
 
-                            <input type="file" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
+                            <input type="file" name="files" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
                             <label for="file"><span>Dodaj zdjęcia</span></label>
                         </div>
                     </div>
@@ -92,78 +95,173 @@
 
             <section class="select_category">
                 <h2>Jakie książki Cię interesują?</h2>
-                <figure class="category"><img src="img/poland.png" alt="">
+                <figure class="category"><img src="img/poland.png" alt="polish">
                     <figcaption>J.polski</figcaption>
                 </figure>
-                <figure class="category"><img src="img/england.png" alt="">
+                <figure class="category"><img src="img/england.png" alt="english">
                     <figcaption>J.angielski</figcaption>
                 </figure>
-                <figure class="category"><img src="img/germany.png" alt="">
+                <figure class="category"><img src="img/germany.png" alt="german">
                     <figcaption>J.niemiecki</figcaption>
                 </figure>
-                <figure class="category"><img src="img/history.png" alt="">
+                <figure class="category"><img src="img/history.png" alt="history">
                     <figcaption>Historia</figcaption>
                 </figure>
-                <figure class="category"><img src="img/entrepreneurship.png" alt="">
+                <figure class="category"><img src="img/entrepreneurship.png" alt="entrepreneurship">
                     <figcaption>P.przedsiębiorczości</figcaption>
                 </figure>
-                <figure class="category"><img src="img/geography.png" alt="">
+                <figure class="category"><img src="img/geography.png" alt="geography">
                     <figcaption>Geografia</figcaption>
                 </figure>
-                <figure class="category"><img src="img/biology.png" alt="">
+                <figure class="category"><img src="img/biology.png" alt="biology">
                     <figcaption>Biologia</figcaption>
                 </figure>
-                <figure class="category"><img src="img/chemistry.png" alt="">
+                <figure class="category"><img src="img/chemistry.png" alt="chemistry">
                     <figcaption>Chemia</figcaption>
                 </figure>
-                <figure class="category"><img src="img/physics.png" alt="">
+                <figure class="category"><img src="img/physics.png" alt="physics">
                     <figcaption>Fizyka</figcaption>
                 </figure>
-                <figure class="category"><img src="img/maths.png" alt="">
+                <figure class="category"><img src="img/maths.png" alt="math">
                     <figcaption>Matematyka</figcaption>
                 </figure>
-                <figure class="category"><img src="img/safety.png" alt="">
+                <figure class="category"><img src="img/safety.png" alt="safety">
                     <figcaption>EDB</figcaption>
                 </figure>
-                <figure class="category"><img src="img/religion.png" alt="">
+                <figure class="category"><img src="img/religion.png" alt="religion">
                     <figcaption>Religia</figcaption>
                 </figure>
-                <figure class="category"><img src="img/it.png" alt="">
+                <figure class="category"><img src="img/it.png" alt="professionalCourses">
                     <figcaption>Przedmioty zawodowe</figcaption>
                 </figure>
-                <figure class="category"><img src="img/society.png" alt="">
+                <figure class="category"><img src="img/society.png" alt="society">
                     <figcaption>WOS</figcaption>
                 </figure>
-                <figure class="category"><img src="img/culture.png" alt="">
+                <figure class="category"><img src="img/culture.png" alt="culture">
                     <figcaption>WOK</figcaption>
                 </figure>
+
+                <form action="search" autocomplete="off" method="post" enctype="multipart/form-data">
+
+                    <input id="process" type="hidden" name="searchList" value="">
+                    <button onclick="findSubjects()" type="submit">Znajdź Oferty</button>
+
+                </form>
+
+                <form action="account" autocomplete="off" method="post" enctype="multipart/form-data">
+
+                    <input type="text" placeholder="Użytkownik" name="login" autocomplete="user-password">
+                    <button onclick="findSubjects()" type="submit">Moje Oferty</button>
+
+                </form>
+
             </section>
             <section class="books">
                 <h2>Wybierz coś dla siebie</h2>
                 <div class="row">
-                    <article class="book"><img src="img/background.jpg" alt="">
-                        <div class="inner_row"><button id="defaultOpen"
-                                onclick="openWindow(event, 'description')">Opis</button>
-                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                            <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
-                        <section id="description" class="window">Lorem
-                            ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui consectetur
-                            soluta consequunturCZYTAJ WIĘCEJ</section>
-                        <section id="contact" class="window">
-                            <p>Użytkownik: Bejcu</p>
-                            <p>Telefon: 666-666-666</p>
-                            <p> Email: wp@gmail.pl</p>
-                        </section>
-                        <section id="items" class="window">
-                            <p>Chemia</p>
-                            <p>Fizyka</p>
-                            <p>J.angielski</p>
-                        </section>
-                    </article>
-                    <article class="book"></article>
-                    <article class="book"></article>
-                    <article class="book"></article>
-                    <article class="book"></article>
+
+                  <article id="n1" class="book"><img src="img/background.jpg" alt="">
+                      <div class="inner_row"><button id="defaultOpen"
+                              onclick="openWindow(event, 'description')">Opis</button>
+                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                      <section id="description" class="window">
+                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                      </section>
+                      <section id="contact" class="window">
+                          <p>Użytkownik: Bejcu</p>
+                          <p>Telefon: 666-666-666</p>
+                          <p> Email: wp@gmail.pl</p>
+                      </section>
+                      <section id="items" class="window">
+                          <p>Chemia</p>
+                          <p>Fizyka</p>
+                          <p>J.angielski</p>
+                      </section>
+                  </article>
+                  <article id="n2" class="book"><img src="img/background.jpg" alt="">
+                      <div class="inner_row"><button id="defaultOpen"
+                              onclick="openWindow(event, 'description')">Opis</button>
+                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                      <section id="description" class="window">
+                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                      </section>
+                      <section id="contact" class="window">
+                          <p>Użytkownik: Bejcu</p>
+                          <p>Telefon: 666-666-666</p>
+                          <p> Email: wp@gmail.pl</p>
+                      </section>
+                      <section id="items" class="window">
+                          <p>Chemia</p>
+                          <p>Fizyka</p>
+                          <p>J.angielski</p>
+                      </section>
+                  </article>
+                  <article id="n3" class="book"><img src="img/background.jpg" alt="">
+                    <div class="inner_row"><button id="defaultOpen"
+                            onclick="openWindow(event, 'description')">Opis</button>
+                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                    <section id="description" class="window">
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                    </section>
+                    <section id="contact" class="window">
+                        <p>Użytkownik: Bejcu</p>
+                        <p>Telefon: 666-666-666</p>
+                        <p> Email: wp@gmail.pl</p>
+                    </section>
+                    <section id="items" class="window">
+                        <p>Chemia</p>
+                        <p>Fizyka</p>
+                        <p>J.angielski</p>
+                    </section>
+                  </article>
+                  <article id="n4" class="book"><img src="img/background.jpg" alt="">
+                    <div class="inner_row"><button id="defaultOpen"
+                            onclick="openWindow(event, 'description')">Opis</button>
+                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                    <section id="description" class="window">
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                    </section>
+                    <section id="contact" class="window">
+                        <p>Użytkownik: Bejcu</p>
+                        <p>Telefon: 666-666-666</p>
+                        <p> Email: wp@gmail.pl</p>
+                    </section>
+                    <section id="items" class="window">
+                        <p>Chemia</p>
+                        <p>Fizyka</p>
+                        <p>J.angielski</p>
+                    </section>
+                  </article>
+                  <article id="n5" class="book"><img src="img/background.jpg" alt="">
+                    <div class="inner_row"><button id="defaultOpen"
+                            onclick="openWindow(event, 'description')">Opis</button>
+                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                    <section id="description" class="window">
+                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                    </section>
+                    <section id="contact" class="window">
+                        <p>Użytkownik: Bejcu</p>
+                        <p>Telefon: 666-666-666</p>
+                        <p> Email: wp@gmail.pl</p>
+                    </section>
+                    <section id="items" class="window">
+                        <p>Chemia</p>
+                        <p>Fizyka</p>
+                        <p>J.angielski</p>
+                    </section>
+                  </article>
+
+
                 </div>
             </section>
         </main>
@@ -178,13 +276,53 @@
     </script>
     <script src="js/nouislider.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/searchController.js"></script>
+    <script src="js/showOffers.js"></script>
     <script>
     <% if( typeof hint !== 'undefined' ){ %>
        let hint = " <%=hint%> ";
        alert( hint );
 
     <% } %>
+
+    "use strict";
+
+    class Offer {
+      constructor( id, username, num, email, description, grade, subjects, links ){
+
+        this.id = id,
+        this.username = username,
+        this.num = num,
+        this.email = email,
+        this.description = description,
+        this.class = grade
+        this.subjects = subjects.split(',')
+        this.links = links.split(',')
+
+      }
+    }
+
+    let clientSideResults = [];
+    let oneOffer;
+
+    <% if( typeof offersToShow != "undefined" ) for (i = 0; i < offersToShow.length ; i++){ %>
+
+      oneOffer = new Offer( "<%= offersToShow[i].id %>", "<%= offersToShow[i].username %>", "<%= offersToShow[i].num %>", "<%= offersToShow[i].email %>", "<%= offersToShow[i].description %>",
+                                "<%= offersToShow[i].class %>", "<%= offersToShow[i].subjects %>", "<%= offersToShow[i].links %>" );
+      clientSideResults.push( oneOffer );
+
+    <% } %>
+
+    for (let prop in clientSideResults[0]) {
+    }
+    alert( clientSideResults );
+
+    showOffers(clientSideResults)
     </script>
+
+
+
+
 </body>
 
 </html>
