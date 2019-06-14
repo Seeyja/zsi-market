@@ -11,9 +11,11 @@
     <link
         href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:400,700|Saira:400,700&amp;subset=latin-ext"
         rel="stylesheet">
+    <link href="lib/dist/css/lightbox.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/nouislider.min.css">
     <link rel="stylesheet" href="css/main.css">
     <!-- <link rel="stylesheet" href="css/style.css"> -->
+    </style>
 </head>
 
 <body>
@@ -23,16 +25,22 @@
             <nav>
                 <ul>
                     <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
-                    <li><a href="#"><i class="fas fa-user-circle"></i>Konto</a></li>
                 </ul>
             </nav>
+
+
+            <form class="my_offers" method="post" enctype="multipart/form-data" action="account">
+              <input required type="text" placeholder="Użytkownik" name="login">
+              <button onclick="findSubjects()" type="submit">Moje oferty</button>
+            </form>
+
+
         </header>
         <main>
             <section class="add_book">
                 <form method="post" enctype = "multipart/form-data" action="main">
-
                     <div class="row">
-                        <input required type="text" placeholder="Użytkownik" name="login" autocomplete="user-password">
+                        <input required type="text" placeholder="Użytkownik" name="login">
                         <select required name="class">
                             <option value="">Wybierz klasę</option>
                             <option value="1">1</option>
@@ -141,30 +149,34 @@
                     <figcaption>WOK</figcaption>
                 </figure>
 
-                <form action="search" autocomplete="off" method="post" enctype="multipart/form-data">
-
-                    <input id="process" type="hidden" name="searchList" value="">
-                    <button onclick="findSubjects()" type="submit">Znajdź Oferty</button>
-
-                </form>
-
-                <form action="account" autocomplete="off" method="post" enctype="multipart/form-data">
-
-                    <input type="text" placeholder="Użytkownik" name="login" autocomplete="user-password">
-                    <button onclick="findSubjects()" type="submit">Moje Oferty</button>
-
-                </form>
-
             </section>
+
+            <form class="offers" action="search" method="post" enctype="multipart/form-data">
+
+                <input id="process" type="hidden" name="searchList" value="">
+                <button onclick="findSubjects()" type="submit">Znajdź Oferty</button>
+
+            </form>
+
             <section class="books">
+                <i id ="prevButton" class="fas fa-arrow-circle-left"></i>
+                <i id ="nextButton" class="fas fa-arrow-circle-right"></i>
                 <h2>Wybierz coś dla siebie</h2>
                 <div class="row">
 
-                  <article id="n1" class="book"><img src="img/background.jpg" alt="">
-                      <div class="inner_row"><button id="defaultOpen"
-                              onclick="openWindow(event, 'description')">Opis</button>
+                  <article id="n0" class="book">
+
+                    <form action="modify" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="modifyInfo" value="">
+                      <button class="modify" type="submit">Modyfikuj</button>
+                    </form>
+                      <a href="img/books-bg.jpg" data-lightbox="n0l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+
+                      <div class="inner_row">
+                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
                           <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                      </div>
                       <section id="description" class="window">
                           <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
                               consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
@@ -180,11 +192,20 @@
                           <p>J.angielski</p>
                       </section>
                   </article>
-                  <article id="n2" class="book"><img src="img/background.jpg" alt="">
-                      <div class="inner_row"><button id="defaultOpen"
-                              onclick="openWindow(event, 'description')">Opis</button>
+
+                  <article id="n1" class="book">
+
+                    <form action="modify" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="modifyInfo" value="">
+                      <button class="modify" type="submit">Modyfikuj</button>
+                    </form>
+                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+
+                      <div class="inner_row">
+                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
                           <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                      </div>
                       <section id="description" class="window">
                           <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
                               consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
@@ -200,70 +221,93 @@
                           <p>J.angielski</p>
                       </section>
                   </article>
-                  <article id="n3" class="book"><img src="img/background.jpg" alt="">
-                    <div class="inner_row"><button id="defaultOpen"
-                            onclick="openWindow(event, 'description')">Opis</button>
-                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
-                    <section id="description" class="window">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                    </section>
-                    <section id="contact" class="window">
-                        <p>Użytkownik: Bejcu</p>
-                        <p>Telefon: 666-666-666</p>
-                        <p> Email: wp@gmail.pl</p>
-                    </section>
-                    <section id="items" class="window">
-                        <p>Chemia</p>
-                        <p>Fizyka</p>
-                        <p>J.angielski</p>
-                    </section>
-                  </article>
-                  <article id="n4" class="book"><img src="img/background.jpg" alt="">
-                    <div class="inner_row"><button id="defaultOpen"
-                            onclick="openWindow(event, 'description')">Opis</button>
-                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
-                    <section id="description" class="window">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                    </section>
-                    <section id="contact" class="window">
-                        <p>Użytkownik: Bejcu</p>
-                        <p>Telefon: 666-666-666</p>
-                        <p> Email: wp@gmail.pl</p>
-                    </section>
-                    <section id="items" class="window">
-                        <p>Chemia</p>
-                        <p>Fizyka</p>
-                        <p>J.angielski</p>
-                    </section>
-                  </article>
-                  <article id="n5" class="book"><img src="img/background.jpg" alt="">
-                    <div class="inner_row"><button id="defaultOpen"
-                            onclick="openWindow(event, 'description')">Opis</button>
-                        <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                        <button onclick="openWindow(event, 'items')">Przedmioty</button></div>
-                    <section id="description" class="window">
-                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                            consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                    </section>
-                    <section id="contact" class="window">
-                        <p>Użytkownik: Bejcu</p>
-                        <p>Telefon: 666-666-666</p>
-                        <p> Email: wp@gmail.pl</p>
-                    </section>
-                    <section id="items" class="window">
-                        <p>Chemia</p>
-                        <p>Fizyka</p>
-                        <p>J.angielski</p>
-                    </section>
-                  </article>
+                  <article id="n2" class="book">
 
+                    <form action="modify" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="modifyInfo" value="">
+                      <button class="modify" type="submit">Modyfikuj</button>
+                    </form>
+                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
+                      <div class="inner_row">
+                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                      </div>
+                      <section id="description" class="window">
+                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                      </section>
+                      <section id="contact" class="window">
+                          <p>Użytkownik: Bejcu</p>
+                          <p>Telefon: 666-666-666</p>
+                          <p> Email: wp@gmail.pl</p>
+                      </section>
+                      <section id="items" class="window">
+                          <p>Chemia</p>
+                          <p>Fizyka</p>
+                          <p>J.angielski</p>
+                      </section>
+                  </article>
+                  <article id="n3" class="book">
+
+                    <form action="modify" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="modifyInfo" value="">
+                      <button class="modify" type="submit">Modyfikuj</button>
+                    </form>
+                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+
+                      <div class="inner_row">
+                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                      </div>
+                      <section id="description" class="window">
+                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                      </section>
+                      <section id="contact" class="window">
+                          <p>Użytkownik: Bejcu</p>
+                          <p>Telefon: 666-666-666</p>
+                          <p> Email: wp@gmail.pl</p>
+                      </section>
+                      <section id="items" class="window">
+                          <p>Chemia</p>
+                          <p>Fizyka</p>
+                          <p>J.angielski</p>
+                      </section>
+                  </article>
+                  <article id="n4" class="book">
+
+                    <form action="modify" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="modifyInfo" value="">
+                      <button class="modify" type="submit">Modyfikuj</button>
+                    </form>
+                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+
+                      <div class="inner_row">
+                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                      </div>
+                      <section id="description" class="window">
+                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                      </section>
+                      <section id="contact" class="window">
+                          <p>Użytkownik: Bejcu</p>
+                          <p>Telefon: 666-666-666</p>
+                          <p> Email: wp@gmail.pl</p>
+                      </section>
+                      <section id="items" class="window">
+                          <p>Chemia</p>
+                          <p>Fizyka</p>
+                          <p>J.angielski</p>
+                      </section>
+                  </article>
                 </div>
             </section>
+
         </main>
         <footer>
             <p> 2019 &#169; Wszelkie prawa zastrzeżone. Support:
@@ -313,11 +357,20 @@
 
     <% } %>
 
-    for (let prop in clientSideResults[0]) {
-    }
-    alert( clientSideResults );
+    let counter = 0;
+    showOffers(clientSideResults, counter, "first");
 
-    showOffers(clientSideResults)
+    document.getElementById('nextButton').addEventListener('click', function(){
+        //alert();
+        counter++;
+        showOffers(clientSideResults, counter, "next");
+    });
+    document.getElementById('prevButton').addEventListener('click', function(){
+        //alert();
+        counter--;
+        showOffers(clientSideResults, counter, "prev");
+    });
+
     </script>
 
 

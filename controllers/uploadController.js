@@ -40,6 +40,17 @@ const upload = multer({
 
 module.exports = function( app ){
 
+  app.post('/sendmodification', function ( req, res ) {
+
+    upload( req, res, ( err )=>{
+      console.log('we r in upload');
+
+      connectionController.modifyItControllerFunction( req, res );
+
+    }) //Upload end
+
+  })
+
   app.post('/main', function ( req, res ) {
 
     upload( req, res, ( err )=>{
@@ -53,7 +64,10 @@ module.exports = function( app ){
         err = 'File uploaded';
       console.log( req.body );
       console.log( req.files );
+
       connectionController.connectionControllerFunction( req, res );
+
+
     }) //Upload end
 
   });// app.post end
