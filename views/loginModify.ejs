@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Zsi-Market</title>
-    <link href="lib/dist/css/lightbox.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link
@@ -34,10 +33,11 @@
         </header>
         <main>
             <section class="add_book">
-                <form autocomplete="off" method="post" enctype="multipart/form-data">
+                <form autocomplete="off" method="post" enctype="multipart/form-data" action="sendmodification">
 
                     <div class="row">
-                        <input type="text" placeholder="Login" name="login" value="<%= keepData.username %>">
+                        <input type="text" placeholder="Login" name="login" disabled value="<%= keepData.username %>">
+                        <input type="hidden" name="login" value="<%= keepData.username %>">
                         <input type="text" placeholder="AccessCode" name="accessCode">
                         <label>Wybierz klasę</label>
                         <select name = "class" >
@@ -84,7 +84,7 @@
                         <div class="inner_row">
                             <input type="file" name="files" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
                             <label for="file"><span>Dodaj zdjęcia</span></label>
-                            <button type="submit">Dodaj książkę</button>
+                            <button type="submit">Zmodyfikuj ofertę</button>
                         </div>
                     </div>
 
@@ -154,8 +154,7 @@
         <footer></footer>
     </div>
     <script src="js/main.js"></script>
-    <script src="lib/dist/js/lightbox.js"></script>
-    <script src="js/checkBack.js"></script>
+
     <script>
     <% if( typeof hint !== 'undefined' ){ %>
        let hint = " <%=hint%> ";

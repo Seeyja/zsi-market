@@ -137,9 +137,9 @@ document.querySelectorAll("#defaultOpen").forEach(function (open) {
 
 /* CONTACT CHOICE*/
 
-const button = document.querySelector("button[type=submit]");
-const tel = document.querySelector("input[type=tel]");
-const email = document.querySelector("input[type=email]");
+const button = document.querySelector(".add_book button[type=submit]");
+const tel = document.querySelector(".add_book input[type=tel]");
+const email = document.querySelector(".add_book input[type=email]");
 
 const validate = () => {
 
