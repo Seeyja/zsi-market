@@ -8,10 +8,10 @@ const upload = multer().none();
 
 //Create connection
 const db = mysql.createConnection({
-    host     : 'mysql31.mydevil.net',
-    user     : 'm1416_szpakusik',
-    password : 'Norbi1909',
-    database : 'm1416_bookservice'
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'bookservice'
 });
 
 // Connect
