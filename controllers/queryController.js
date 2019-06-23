@@ -10,6 +10,8 @@ class Offer {
     this.subjects.push( foundOffer.subject );
     this.links = [];
     this.links.push( foundOffer.link )
+    this.titles = [];
+    this.titles.push( foundOffer.title )
 
   }
 }
@@ -30,15 +32,20 @@ module.exports = {
       setData.offer_id = sqlOffersInResult.insertId;
 
 
+
       for ( subject in bookTypes ){
+            console.log("JEDNAC");
+        console.log(subject);
 
         if( typeof bookTypes[subject]!=='undefined' ){
           let sqlBookTypeOut = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
           let queryBookTypeOut = db.query( sqlBookTypeOut, (err, sqlBookTypeOutResults )=>{
             if( err ) throw err;
+
             //console.log( sqlBookTypeOut );
             //console.log("Strange thing:");
             //console.log(subject);
+
             setData.book_type_id = sqlBookTypeOutResults[0].id;
             //console.log(setData);
             let sqlSetIn = 'INSERT INTO sets SET ?';
@@ -89,6 +96,9 @@ module.exports = {
 
               if ( !offersToShow[i].subjects.includes( foundOffer.subject ) )
                 offersToShow[i].subjects.push( foundOffer.subject );
+
+              if ( !offersToShow[i].titles.includes( foundOffer.title  ) )
+                offersToShow[i].titles.push( foundOffer.title );
 
             }
 
