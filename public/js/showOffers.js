@@ -1,4 +1,5 @@
 function showOffers(offersOnClientSide, counter, direction ){
+  console.log(offersOnClientSide);
 
     let seenableOffers = [];
     let currentPhotos = [];
@@ -50,8 +51,8 @@ function showOffers(offersOnClientSide, counter, direction ){
         currentChildnodes[9].innerHTML = `<p>Użytkownik: ${offersOnClientSide[i].username}</p> <p> Telefon: ${offersOnClientSide[i].num}</p>  <p>Email: ${offersOnClientSide[i].email}`;
 
         currentChildnodes[11].innerHTML = "";
-      for (subject of offersOnClientSide[i].subjects) {
-        currentChildnodes[11].innerHTML += `<p>${subject}</p>`;
+      for (title of offersOnClientSide[i].titles) {
+        currentChildnodes[11].innerHTML += `<p>${title}</p>`;
       }
 
       currentChildnodes[1].childNodes[1].value = offersOnClientSide[i].id;

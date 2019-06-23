@@ -36,7 +36,8 @@ module.exports = function( app ){
       this.subjects.push( foundOffer.subject );
       this.links = [];
       this.links.push( foundOffer.link )
-
+      this.titles = [];
+      this.titles.push( foundOffer.title)
     }
   }
 
@@ -44,10 +45,10 @@ module.exports = function( app ){
 
       upload( req, res, ( err )=>{
 
-        console.log( req.body );
+        //console.log( req.body );
 
         let offersToShow = []
-        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, users.code FROM
+        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, book_type.title, photos.link, offers.id, book_type.class, users.code FROM
                               offers  INNER JOIN users ON offers.user_id = users.id
                                       INNER JOIN photos ON photos.offer_id = offers.id
                                       INNER JOIN sets ON sets.offer_id = offers.id
@@ -89,8 +90,11 @@ module.exports = function( app ){
                                                   if ( !offersToShow[i].links.includes( foundOffer.link ) )
                                                     offersToShow[i].links.push( foundOffer.link );
 
-                                                  if ( !offersToShow[i].subjects.includes( foundOffer.subject ) )
+                                                  if ( !offersToShow[i].subjects.includes( foundOffer.subject ) ){
                                                     offersToShow[i].subjects.push( foundOffer.subject );
+                                                    offersToShow[i].subjects.push( foundOffer.title );
+
+                                                  }
 
                                                 }
 
@@ -131,7 +135,7 @@ module.exports = function( app ){
         let sqlString = req.body.searchList.replace(/ /gi, '" OR book_type.subject = "');
         console.log( sqlString );
 
-        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, offers.add_date FROM
+        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                               offers  INNER JOIN users ON offers.user_id = users.id
                                       INNER JOIN photos ON photos.offer_id = offers.id
                                       INNER JOIN sets ON sets.offer_id = offers.id
@@ -152,7 +156,7 @@ module.exports = function( app ){
       upload( req, res, ( err )=>{
         console.log(req.body);
 
-        const sqlMyOffers = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, offers.add_date FROM
+        const sqlMyOffers = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                               offers  INNER JOIN users ON offers.user_id = users.id
                                       INNER JOIN photos ON photos.offer_id = offers.id
                                       INNER JOIN sets ON sets.offer_id = offers.id

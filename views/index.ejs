@@ -333,7 +333,7 @@
     "use strict";
 
     class Offer {
-      constructor( id, username, num, email, description, grade, subjects, links ){
+      constructor( id, username, num, email, description, grade, subjects, links, titles ){
 
         this.id = id,
         this.username = username,
@@ -343,6 +343,7 @@
         this.class = grade
         this.subjects = subjects.split(',')
         this.links = links.split(',')
+        this.titles = titles.split(',')
 
       }
     }
@@ -353,7 +354,7 @@
     <% if( typeof offersToShow != "undefined" ) for (i = 0; i < offersToShow.length ; i++){ %>
 
       oneOffer = new Offer( "<%= offersToShow[i].id %>", "<%= offersToShow[i].username %>", "<%= offersToShow[i].num %>", "<%= offersToShow[i].email %>", "<%= offersToShow[i].description %>",
-                                "<%= offersToShow[i].class %>", "<%= offersToShow[i].subjects %>", "<%= offersToShow[i].links %>" );
+                                "<%= offersToShow[i].class %>", "<%= offersToShow[i].subjects %>", "<%= offersToShow[i].links %>", "<%= offersToShow[i].titles %>" );
       clientSideResults.push( oneOffer );
 
     <% } %>
