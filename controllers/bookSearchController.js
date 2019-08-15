@@ -1,28 +1,18 @@
 const multer = require('multer');
 const path = require('path');
-const connectionController = require('./connectionController.js');
 const queryController = require('./queryController.js');
+const queries = require('./queries2.js');
 const mysql = require( 'mysql' );
+
+const connectionController = require('./connectionController');
+
 //Init Upload
 const upload = multer().none();
 
 //Create connection
-const db = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'bookservice'
-});
-
-// Connect
-db.connect( ( err ) => {
-    if( err ) throw err;
-    console.log( 'Connected' );
-});
+const db = connectionController.db;
 
 module.exports = function( app ){
-
-  //////////////////////////////////
 
   class Offer {
     constructor( foundOffer ){
@@ -41,7 +31,7 @@ module.exports = function( app ){
     }
   }
 
-    app.post('/modify', function( req, res) {
+  app.post('/modify', function( req, res) {
 
       upload( req, res, ( err )=>{
 
@@ -124,16 +114,17 @@ module.exports = function( app ){
 
 
 
-      });// app post end
-  //////////////////////////////////
+  });// app post end
 
-    app.post('/search', function( req, res ) {
+  app.post('/search', function( req, res ) {
 
       upload( req, res, ( err )=>{
 
         console.log( req.body.searchList );
-        let sqlString = req.body.searchList.replace(/ /gi, '" OR book_type.subject = "');
-        console.log( sqlString );
+
+
+        let subjectListString = req.body.searchList.replace(/ /gi, '" OR book_type.subject = "');
+        console.log( subjectListString );
 
         let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                               offers  INNER JOIN users ON offers.user_id = users.id
@@ -143,15 +134,16 @@ module.exports = function( app ){
                                       RIGHT JOIN book_type ON book_type.id = sets.book_type_id
                                       WHERE sets.offer_id IN
                                       (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
-                                        WHERE book_type.subject = "${sqlString}" )` ;
+                                        WHERE book_type.subject = "${subjectListString}" )` ;
 
 
-        queryController.findMyOffers(sqlOfferSearch, req, res, db);
+
+        queryController.findOffers(sqlOfferSearch, req, res, db);
       });
     });
 
-    //Look for My offers
-    app.post('/account', function( req, res ) {
+  //Look for My offers
+  app.post('/account', function( req, res ) {
 
       upload( req, res, ( err )=>{
         console.log(req.body);
@@ -164,7 +156,7 @@ module.exports = function( app ){
                                       WHERE sets.offer_id IN
                                       (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
                                       WHERE users.username = "${req.body.login}" )` ;
-        queryController.findMyOffers(sqlMyOffers, req, res, db)
+        queryController.findOffers(sqlMyOffers, req, res, db)
       });
     });
 

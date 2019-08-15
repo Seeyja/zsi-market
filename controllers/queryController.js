@@ -71,7 +71,7 @@ module.exports = {
 
   },//InsertSetAndOffer end
 
-  findMyOffers: function(query, req, res, db){
+  findOffers: function(query, req, res, db){
     offersToShow=[]
     let queryExistingUserOut = db.query( query, ( err, foundOffersResult ) => {
         if( err ) throw err;
