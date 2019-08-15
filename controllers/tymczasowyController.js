@@ -1,30 +1,4 @@
-﻿const mysql = require( 'mysql' );
-const queryController = require('./queryController.js');
-const fs = require('fs');
-const multer = require('multer');
-
-const tymczasowyController = require('./tymczasowyController');
-
-const upload = multer().none();
-
-//Create connection
-const db = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'bookservice'
-});
-
-// Connect
-db.connect( ( err ) => {
-    if( err ) throw err;
-    console.log( 'Connected' );
-});
-
 module.exports = {
-
-  db: db,
-  // V Old ConnectorControllerFunction V
   addOffer: function( req, res, db ){
 
     console.log('conectionControler----------');
@@ -231,4 +205,4 @@ module.exports = {
   //  });//upload End
   }// modifyOffer
 
-}//module.exports end
+  }//module.exports end

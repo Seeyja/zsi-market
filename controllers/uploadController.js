@@ -45,7 +45,7 @@ module.exports = function( app ){
     upload( req, res, ( err )=>{
       console.log('we r in upload');
 
-      connectionController.modifyItControllerFunction( req, res );
+      connectionController.modifyOffer( req, res );
 
     }) //Upload end
 
@@ -63,9 +63,9 @@ module.exports = function( app ){
       else
         err = 'File uploaded';
       console.log( req.body );
-      console.log( req.files );
+      //console.log( req.files );
 
-      connectionController.connectionControllerFunction( req, res );
+      connectionController.addOffer( req, res );
 
 
     }) //Upload end

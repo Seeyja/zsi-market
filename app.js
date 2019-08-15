@@ -29,10 +29,10 @@ app.post('/modify', function(req, res, db) {
 
 
 // Route to index
-app.get('/main', function(req, res){
+app.get('/', function(req, res){
       res.render('index');
 });
-app.get('/', function(req, res){
+app.get('/main', function(req, res){
       res.render('index');
 });
 app.get('/login', function(req, res){
