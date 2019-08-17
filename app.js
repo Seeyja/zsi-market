@@ -5,6 +5,8 @@ const connectionController = require('./controllers/connectionController.js');
 const uploadController = require('./controllers/uploadController.js');
 const bookSearchController = require('./controllers/bookSearchController.js');
 
+const bookController = require('./controllers/bookController.js');
+
 const app = express();
 const multer = require('multer');
 const path = require('path');
@@ -22,6 +24,7 @@ app.use( express.static( './public' ) );
 //fire controllers
 uploadController(app);
 bookSearchController(app);
+bookController( app );
 
 app.post('/modify', function(req, res, db) {
   connectionController.modifyController(req, res)
