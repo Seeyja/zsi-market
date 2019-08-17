@@ -139,6 +139,7 @@ module.exports = function( app ){
 
 
         queryController.findOffers(sqlOfferSearch, req, res, db);
+
       });
     });
 

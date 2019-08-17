@@ -29,7 +29,7 @@
             </nav>
 
 
-            <form class="my_offers" method="post" enctype="multipart/form-data" action="account">
+            <form class="my_offers" method="get" action="books">
               <input required type="text" placeholder="Użytkownik" name="login">
               <button onclick="findSubjects()" type="submit">Moje oferty</button>
             </form>
@@ -38,7 +38,7 @@
         </header>
         <main>
             <section class="add_book">
-                <form method="post" enctype = "multipart/form-data" action="main">
+                <form method="post" enctype = "multipart/form-data" action="books">
                     <div class="row">
                         <input required type="text" placeholder="Użytkownik" name="login">
                         <select required name="class">
@@ -151,7 +151,8 @@
 
             </section>
 
-            <form class="offers" action="search" method="post" enctype="multipart/form-data">
+        <!--<form class="offers" action="search" method="post" enctype="multipart/form-data"> -->
+            <form class="offers" action="books" method="get" >
 
                 <input id="process" type="hidden" name="searchList" value="">
                 <button onclick="findSubjects()" type="submit">Znajdź Oferty</button>
