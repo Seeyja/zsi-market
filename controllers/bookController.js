@@ -2,6 +2,7 @@ const multer = require('multer');
 const mysql = require( 'mysql' );
 const connectionController = require('./connectionController');
 const queryController = require('./queryController.js');
+const userController = require('./userController');
 const path = require('path');
 
 const db = connectionController.db;
@@ -45,8 +46,6 @@ module.exports = function( app ){
 
   app.get( '/books', ( req, res )=>{
 
-    console.log( req.query.searchList );
-
     let sqlOffersQuery;
 
     if ( typeof req.query.searchList != "undefined" ) {
@@ -61,8 +60,9 @@ module.exports = function( app ){
                                       WHERE sets.offer_id IN
                                       (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
                                         WHERE book_type.subject = "${subjectListString}" )` ;
-
     } else if ( typeof req.query.login != "undefined" ) {
+
+      req.query.searchList = undefined;
 
       sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                                                               offers  INNER JOIN users ON offers.user_id = users.id
@@ -72,31 +72,53 @@ module.exports = function( app ){
                                                                       WHERE sets.offer_id IN
                                                                       (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
                                                                       WHERE users.username = "${req.query.login}" )` ;
-
     } else res.send('something went wrong');
 
-    queryController.findOffers(sqlOffersQuery, req, res, db);
+    queryController.findOffers(sqlOffersQuery, req, res, db, req.query.searchList);
 
   } );
 
   app.post( '/books', ( req, res )=>{
 
-// Pobiera pliki i dane z inputow i przekazuje jako req do addOffer()
+    // Pobiera pliki i dane z inputow i przekazuje jako req do addOffer()
     upload( req, res, ( err )=>{
 
         if(err) throw err;
 
-        if ( req.files == undefined )
+        if ( req.files == undefined ){
+        //  req.files.link = 'default.jpg';
           err = "Error: No file selected";
+        }
 
         else
           err = 'File uploaded';
 
         //console.log( req.body );
-        //console.log( req.files );
+        console.log("HILILIGO!" + req.files[0] );
+        for (var variable in req.files[0]) {
 
-        queryController.addOffer( req, res, db );
+          console.log(variable);
+        }
+
+        userController.addOffer( req, res, db );
+    }); //Upload end
+
+  } );
+
+  app.post( '/sendmodification',  ( req, res )=>{
+
+    upload( req, res, ( err )=>{
+
+      queryController.modifyOffer( req, res, db );
 
     }) //Upload end
-  });//Post end
+  });
+
+  app.post( '/deletePhoto',  ( req, res )=>{
+
+    upload( req, res, ( err )=>{
+      queryController.deletePhoto( req, res, db );
+    }) //Upload end
+
+  });
 }//export end
