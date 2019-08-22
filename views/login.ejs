@@ -23,7 +23,7 @@
 <body>
     <div class="wrapper">
         <header class="clearfix">
-            <figure class="logo"><img src="img/logo.png" alt="logo"></figure>
+          <a href="/"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
             <nav>
                 <ul>
                     <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
@@ -34,7 +34,7 @@
               <input required type="text" placeholder="Użytkownik" name="login">
               <button onclick="findSubjects()" type="submit">Moje oferty</button>
             </form>
-            
+
         </header>
         <main>
             <section class="add_book">
@@ -146,8 +146,7 @@
             <section class="books">
                 <h2>Wybierz coś dla siebie</h2>
                 <div class="row">
-                    <div><img src="img/background.jpg" alt="">
-                        Użytkownik: Tomek</div>
+                    <div></div>
                     <div></div>
                     <div></div>
                     <div></div>
@@ -178,7 +177,12 @@
         }//end if undefined
       }//end for in
     }//end
+
     %>
+
+    let classChanger = document.getElementsByName('class')[0].childNodes[<%= keepData.class * 2 - 1 %>];
+    classChanger.setAttribute("selected", "selected");
+
     </script>
 </body>
 

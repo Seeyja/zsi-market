@@ -40,17 +40,6 @@ const upload = multer({
 
 module.exports = function( app ){
 
-  app.post('/sendmodification', function ( req, res ) {
-
-    upload( req, res, ( err )=>{
-      console.log('we r in upload');
-
-      connectionController.modifyOffer( req, res );
-
-    }) //Upload end
-
-  })
-
   app.post('/main', function ( req, res ) {
 
     upload( req, res, ( err )=>{

@@ -22,7 +22,7 @@
 <body>
     <div class="wrapper">
         <header class="clearfix">
-            <figure class="logo"><img src="img/logo.png" alt="logo"></figure>
+            <a href="/"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
             <nav>
                 <ul>
                     <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
@@ -90,6 +90,22 @@
                     </div>
 
                 </form>
+
+
+
+
+
+                <div class="HUJEC">
+                  <% %>
+                  <% for( link of keepPhotos){ %>
+                   <form class="" action="deletePhoto" method="post" enctype="multipart/form-data">
+                       <a target="_blank" href = "uploads/<%= link %>"><%= link %></a>
+                       <input type="text" name="unlink" value="<%= link %>">
+                       <button type="submit">Usuń zdjęcie</button>
+                   </form>
+                  <% } %>
+                </div>
+
             </section>
 
             <section class="select_category">
@@ -143,8 +159,7 @@
             <section class="books">
                 <h2>Wybierz coś dla siebie</h2>
                 <div class="row">
-                    <div><img src="img/background.jpg" alt="">
-                        Użytkownik: Tomek</div>
+                    <div></div>
                     <div></div>
                     <div></div>
                     <div></div>
@@ -164,9 +179,9 @@
     <% } %>
     <%
     if ( typeof keepBookTypes !== "undefined"){
-      for ( subject in keepBookTypes ){
+      for ( subject of keepBookTypes ){
 
-        if( typeof keepBookTypes[subject] !== 'undefined' ){
+        if( typeof subject !== 'undefined' ){
           console.log(subject);
         %>
           document.getElementsByName('<%=subject%>')[0].checked = true;
