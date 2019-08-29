@@ -49,71 +49,80 @@ module.exports = function( app ){
                                         WHERE offers.id = "${req.body.modifyInfo}" )` ;
 
         let queryModifyResult = db.query( sqlOfferSearch, ( err, foundModifyOffersResult ) => {
-            if( err ) throw err;
-            console.log( '11' );
-            //console.log( foundModifyOffersResult );
+              if( err ) throw err;
 
-            let userData = {
-                username: foundModifyOffersResult[0].username,
-                num: foundModifyOffersResult[0].num,
-                email: foundModifyOffersResult[0].email,
-                code: foundModifyOffersResult[0].code,
-                offerId: foundModifyOffersResult[0].id
-            }
-            let bookTypes = {}
+              if ( req.body.accessCode === foundModifyOffersResult[0].code) {
+                  console.log( '11' );
+                  //console.log( foundModifyOffersResult );
 
-
-            //Transformacja kilku obiektow w jeden. Zmiana 2 wlasciwosci na tablice
-            for ( foundOffer of foundModifyOffersResult ) {
-
-              let alreadyinTable = 0;
-
-              for( let i = 0; i < offersToShow.length; i++ ){
-
-                if ( foundOffer.id != offersToShow[i].id )
-                  continue;
-
-                else if ( foundOffer.id == offersToShow[i].id ){
-
-                  alreadyinTable = 1;
-
-                  if ( !offersToShow[i].links.includes( foundOffer.link ) )
-                    offersToShow[i].links.push( foundOffer.link );
-
-                  if ( !offersToShow[i].subjects.includes( foundOffer.subject ) ){
-                    offersToShow[i].subjects.push( foundOffer.subject );
-                    offersToShow[i].titles.push( foundOffer.title );
-
+                  let userData = {
+                      username: foundModifyOffersResult[0].username,
+                      num: foundModifyOffersResult[0].num,
+                      email: foundModifyOffersResult[0].email,
+//                      code: foundModifyOffersResult[0].code,
+                      offerId: foundModifyOffersResult[0].id
                   }
+                  let bookTypes = {}
 
-                }
 
-                else console.log("Sth went wrong");
+                  //Transformacja kilku obiektow w jeden. Zmiana 2 wlasciwosci na tablice
+                  for ( foundOffer of foundModifyOffersResult ) {
 
+                    let alreadyinTable = 0;
+
+                    for( let i = 0; i < offersToShow.length; i++ ){
+
+                      if ( foundOffer.id != offersToShow[i].id )
+                        continue;
+
+                      else if ( foundOffer.id == offersToShow[i].id ){
+
+                        alreadyinTable = 1;
+
+                        if ( !offersToShow[i].links.includes( foundOffer.link ) )
+                          offersToShow[i].links.push( foundOffer.link );
+
+                        if ( !offersToShow[i].subjects.includes( foundOffer.subject ) ){
+                          offersToShow[i].subjects.push( foundOffer.subject );
+                          offersToShow[i].titles.push( foundOffer.title );
+
+                        }
+
+                      }
+
+                      else console.log("Sth went wrong");
+
+                    }
+
+                    if (alreadyinTable == 0)
+                      offersToShow.push( new Offer( foundOffer ) );
+              //                console.log(offersToShow);
+
+                  }//For transformacja end
+
+
+
+                  console.log(offersToShow[0].subjects);
+                  console.log('NEEDit'+offersToShow[0].links);
+
+                  console.log(typeof offersToShow[0].links);
+
+                  res.render( 'loginModify', {keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
               }
 
-              if (alreadyinTable == 0)
-                offersToShow.push( new Offer( foundOffer ) );
-        //                console.log(offersToShow);
-
-            }//For transformacja end
-
-
-
-            console.log(offersToShow[0].subjects);
-            console.log('NEEDit'+offersToShow[0].links);
-
-            console.log(typeof offersToShow[0].links);
-
-            res.render( 'loginModify', {hint: 'Podaj kod by zmodyfikowac', keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
-
+              else {
+                res.render( 'index', {hint: 'Zły kod!'} )
+              }
         });//querymodifyresult end
-        })// upload end
+
+
+
+      })// upload end
 
 
 
 
-  });// app post end
+  });
 
   app.post('/search', function( req, res ) {
 

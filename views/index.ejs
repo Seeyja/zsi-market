@@ -30,7 +30,7 @@
 
 
             <form class="my_offers" method="get" action="books">
-              <input required type="text" placeholder="Użytkownik" name="login">
+              <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
               <button onclick="findSubjects()" type="submit">Moje oferty</button>
             </form>
 
@@ -169,6 +169,11 @@
 
                     <form action="modify" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="modifyInfo" value="">
+                      <input type="text" placeholder="AccessCode" name="accessCode" style="
+                          width: 135px;
+                          left: 90px;
+                          position: relative;
+                      ">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
                       <a href="img/books-bg.jpg" data-lightbox="n0l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
@@ -193,7 +198,6 @@
                           <p>J.angielski</p>
                       </section>
                   </article>
-
                   <article id="n1" class="book">
 
                     <form action="modify" method="post" enctype="multipart/form-data">
@@ -214,7 +218,7 @@
                       <section id="contact" class="window">
                           <p>Użytkownik: Bejcu</p>
                           <p>Telefon: 666-666-666</p>
-                          <p> Email: wp@gmail.pl</p>
+                          <p>Email: wp@gmail.pl</p>
                       </section>
                       <section id="items" class="window">
                           <p>Chemia</p>
@@ -228,7 +232,7 @@
                       <input type="hidden" name="modifyInfo" value="">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                      <a href="img/books-bg.jpg" data-lightbox="n2l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
                       <div class="inner_row">
                           <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
@@ -256,7 +260,7 @@
                       <input type="hidden" name="modifyInfo" value="">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                      <a href="img/books-bg.jpg" data-lightbox="n3l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
                       <div class="inner_row">
                           <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
@@ -284,7 +288,7 @@
                       <input type="hidden" name="modifyInfo" value="">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                      <a href="img/books-bg.jpg" data-lightbox="n5l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
                       <div class="inner_row">
                           <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
@@ -375,9 +379,6 @@
     });
 
     </script>
-
-
-
 
 </body>
 

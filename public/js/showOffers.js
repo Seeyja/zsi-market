@@ -12,7 +12,7 @@ function showOffers(offersOnClientSide, counter, direction ){
       document.getElementById('prevButton').style.display = "inline-block"
 
 
-    if ( (counter+1)*5 > offersOnClientSide.length || offersOnClientSide.length == 5)
+    if ( (counter+1)*5 >= offersOnClientSide.length || offersOnClientSide.length == 10)
       document.getElementById('nextButton').style.display = "none"
     else
       document.getElementById('nextButton').style.display = "inline-block"
@@ -40,24 +40,50 @@ function showOffers(offersOnClientSide, counter, direction ){
 
       currentChildnodes = currentOffer.childNodes;
       currentPhotos = offersOnClientSide[i].links
-      console.log(currentChildnodes);
+      console.log(currentPhotos);
 
 
       //Childnote explanation in browser console
-      if (!typeof currentPhotos[0].length < 1)
-        currentChildnodes[3].childNodes[0].childNodes[0].src=`uploads/${currentPhotos[0]}` //Add more photos!
+       //Add more photos!
+
+
+        for( let k = 0; k < currentPhotos.length; k++){
+
+
+          if (k == 0){
+            currentChildnodes[3].childNodes[0].childNodes[0].setAttribute( 'src', `uploads/${currentPhotos[k]}`);
+            currentChildnodes[3].setAttribute( 'href', `uploads/${currentPhotos[k]}`);
+          }
+          else{
+
+            let lightboxEl = document.createElement('a');
+            lightboxEl.href = `uploads/${currentPhotos[k]}`;
+            lightboxEl.setAttribute( 'data-lightbox', `n${i}l`);
+            let figure = document.createElement('figure');
+
+            let fotos = document.createElement('img');
+            fotos.src = `uploads/${currentPhotos[k]}`;
+
+            figure.append(fotos);
+            lightboxEl.append(figure);
+            currentOffer.append( lightboxEl ) //Add more photos!
+          }
+        }
+
+
 
         currentChildnodes[7].innerHTML = `<p>${offersOnClientSide[i].description}</p>`;
         currentChildnodes[9].innerHTML = `<p>Użytkownik: ${offersOnClientSide[i].username}</p> <p> Telefon: ${offersOnClientSide[i].num}</p>  <p>Email: ${offersOnClientSide[i].email}`;
 
         currentChildnodes[11].innerHTML = "";
       for (title of offersOnClientSide[i].titles) {
-        currentChildnodes[11].innerHTML += `<p>${title}</p>`;
+        currentChildnodes[11].innerHTML += `<span>${title}</span></br>`;
       }
 
       currentChildnodes[1].childNodes[1].value = offersOnClientSide[i].id;
       end = i
     }
+
     if (typeof end == "undefined") {
       end = -1;
     }
