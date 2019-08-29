@@ -1,5 +1,5 @@
 // findOffers () - Wyszukuje i pakuje oferty w jedną tablice i przekazuje do res.render()
-
+const fs = require('fs');
 class Offer {
   constructor( foundOffer ){
     this.id = foundOffer.id;
@@ -75,9 +75,12 @@ module.exports = {
       }//Subject for end
 //      console.log('3----------');
 //      console.log(req.files);
+
       if (req.files.length == 0) {
         insertDefaultPhoto(setData.offer_id, db);
       }
+
+//------------------------------
       for ( let i = 0; i < req.files.length; i++ ){
 
         photoData.link = req.files[i].filename;
@@ -87,9 +90,11 @@ module.exports = {
         const sqlPhotoIn = `INSERT INTO photos SET ?`;
         const queryPhotosIn = db.query( sqlPhotoIn, photoData)
       }//Photo for end
+//------------------------------
+
     });//Query offersIn end
 
-  },//InsertSetAndOffer end
+  },
 
   findOffers: function(query, req, res, db, requiredSubjectsString){
 
@@ -100,7 +105,6 @@ module.exports = {
     confirmedOffersToShow=[];
     let queryExistingUserOut = db.query( query, ( err, foundOffersResult ) => {
         if( err ) throw err;
-//            console.log( foundOffersResult );
 
 //Transformacja kilku obiektow w jeden. Zmiana 2 wlasciwosci na tablice
 //np 2 foto (osobne wyniki w wyszukiwaniu) polaczone w jedna oferte (set)
@@ -181,13 +185,8 @@ module.exports = {
 
   modifyOffer: function( req, res, db ){
 
-
           let description = req.body.description;
           let code;
-          do{
-            code = Math.floor(Math.random()*1000000);
-          } while(code < 100000)
-
           let userData = {
               username: req.body.login,
               num: req.body.num,
@@ -211,126 +210,149 @@ module.exports = {
               society: req.body.society,
               culture: req.body.culture,
           }
-          let keepPhotos={
-            links: [],
-          };
           let offerData = {
               description: req.body.description,
               active: 0,
           };
           let entryCode;
           let setData={}; // Data for set table
-          let photoUploadInfo;
+          let photoData={};
 
-        let sqlForCode = `SELECT code FROM users WHERE username = "${userData.username}"`;
+                  let sqlChangeUserData =   `UPDATE users
+                                            SET email = '${userData.email}', num = '${userData.num}'
+                                            WHERE username = '${userData.username}'`;
 
-        let queryForCode = db.query( sqlForCode, ( err, foundCode ) => {
+                  let queryChangeUserData = db.query( sqlChangeUserData, ( err, changeResult ) => {
+                    if( err ) throw err;
+                    console.log(changeResult);
+                  });//Change query end
 
-          if(foundCode[0].code == req.body.accessCode){
+                  let sqlChangeOfferData =  `UPDATE offers
+                                            SET description = '${req.body.description}', active = 0
+                                            WHERE id = '${req.body.offerId}'`;
 
-                let sqlChangeUserData =   `UPDATE users
-                                          SET email = '${userData.email}', num = '${userData.num}'
-                                          WHERE username = '${userData.username}'`;
+                  let queryChangeOfferData = db.query( sqlChangeOfferData, ( err, changeResult ) => {
+                    if( err ) throw err;
+                  });//Change query end
 
-                let queryChangeUserData = db.query( sqlChangeUserData, ( err, changeResult ) => {
-                  if( err ) throw err;
-                  console.log(changeResult);
-                });//Change query end
+                  let sqlFindEverySubjectInOffer = `SELECT book_type.subject, book_type.id FROM book_type, sets WHERE sets.offer_id = '${req.body.offerId}' AND sets.book_type_id = book_type.id`;
+                  let queryFindEverySubjectInOffer = db.query( sqlFindEverySubjectInOffer, ( err, selectSubjectsResult ) => {
+                    if( err ) throw err;
+                    let subjectsFromQuery = [];
+                    let subjectsFromRequest = [];
+                    let finalSubjects = [];
 
-                let sqlChangeOfferData =  `UPDATE offers
-                                          SET description = '${req.body.description}', active = 0
-                                          WHERE id = '${req.body.offerId}'`;
+                    for ( simpleResult of selectSubjectsResult )
+                        subjectsFromQuery.push( simpleResult.subject );
 
-                let queryChangeOfferData = db.query( sqlChangeOfferData, ( err, changeResult ) => {
-                  if( err ) throw err;
-                });//Change query end
+                    for ( subject in bookTypes )
+                      if( typeof bookTypes[subject] !== 'undefined' ) //Cuz "subject" is always defined
+                        subjectsFromRequest.push( subject );
 
+                    //Adding difference
+                    for ( subject in bookTypes ){
+                      if( typeof bookTypes[subject] !== 'undefined' && !subjectsFromQuery.includes( bookTypes[subject] ) ){
+                        let sqlBookTypeOut = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
+                        let queryBookTypeOut = db.query( sqlBookTypeOut, (err, sqlBookTypeOutResults )=>{
+                          if( err ) throw err;
 
+              /*          console.log( sqlBookTypeOut );
+                          //console.log("Strange thing:"); ? bookTypes[subject]??
+                          console.log(subject);
+                          console.log(req.body.class); */
 
-                let sqlFindEverySubjectInOffer = `SELECT book_type.subject, book_type.id FROM book_type, sets WHERE sets.offer_id = '${req.body.offerId}' AND sets.book_type_id = book_type.id`;
-                let queryFindEverySubjectInOffer = db.query( sqlFindEverySubjectInOffer, ( err, selectSubjectsResult ) => {
-                  if( err ) throw err;
-                  let subjectsFromQuery = [];
-                  let subjectsFromRequest = [];
-                  let finalSubjects = [];
+                          setData.book_type_id = sqlBookTypeOutResults[0].id;
+                          setData.offer_id = req.body.offerId;
 
-                  for ( simpleResult of selectSubjectsResult )
-                      subjectsFromQuery.push( simpleResult.subject );
+                          let sqlSetIn = 'INSERT INTO sets SET ?';
+                          let querySetIn = db.query(sqlSetIn, setData, ( err, results )=>{
+                            if(err) throw err;
+                          });
 
-                  for ( subject in bookTypes )
-                    if( typeof bookTypes[subject] !== 'undefined' ) //Cuz "subject" is always defined
-                      subjectsFromRequest.push( subject );
-
-                  //Adding difference
-                  for ( subject in bookTypes ){
-                    if( typeof bookTypes[subject] !== 'undefined' && !subjectsFromQuery.includes( bookTypes[subject] ) ){
-                      let sqlBookTypeOut = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
-                      let queryBookTypeOut = db.query( sqlBookTypeOut, (err, sqlBookTypeOutResults )=>{
-                        if( err ) throw err;
-
-            /*          console.log( sqlBookTypeOut );
-                        //console.log("Strange thing:"); ? bookTypes[subject]??
-                        console.log(subject);
-                        console.log(req.body.class); */
-
-                        setData.book_type_id = sqlBookTypeOutResults[0].id;
-                        setData.offer_id = req.body.offerId;
-
-                        let sqlSetIn = 'INSERT INTO sets SET ?';
-                        let querySetIn = db.query(sqlSetIn, setData, ( err, results )=>{
-                          if(err) throw err;
                         });
 
-                      });
+                      }//ifNotUndefined end
 
-                    }//ifNotUndefined end
+                    }//Subject for end
 
-                  }//Subject for end
+                    //Deleting difference
+                    for ( subject of selectSubjectsResult ) {
+                      if( !subjectsFromRequest.includes( subject.subject ) ){
 
-                  //Deleting difference
-                  for ( subject of selectSubjectsResult ) {
-                    if( !subjectsFromRequest.includes( subject.subject ) ){
+                        let sqlDeleteSetPart = `DELETE FROM sets WHERE book_type_id = '${subject.id}' AND offer_id = '${req.body.offerId}'`;
+                        let queryDeleteSetPart = db.query( sqlDeleteSetPart, ( err, deleteSubjectsResult ) => {
+                          if( err ) throw err;
+                        });
 
-                      let sqlDeleteSetPart = `DELETE FROM sets WHERE book_type_id = '${subject.id}' AND offer_id = '${req.body.offerId}'`;
-                      let queryDeleteSetPart = db.query( sqlDeleteSetPart, ( err, deleteSubjectsResult ) => {
-                        if( err ) throw err;
-                      });
-
+                      }
                     }
+
+                  });//Select Subject end
+
+                  //Adding photos
+                  for ( let i = 0; i < req.files.length; i++ ){
+
+                    photoData.link = req.files[i].filename;
+                    photoData.offer_id = req.body.offerId;
+                    console.log(photoData);
+
+                    const sqlPhotoIn = `INSERT INTO photos SET ?`;
+                    const queryPhotosIn = db.query( sqlPhotoIn, photoData)
+                  }//Photo for end
+
+                  console.log("ATTENTIONE"+req.body.firstPhoto);
+
+                  if ( req.files.length > 0 && req.body.firstPhoto == "default.jpg" ) {
+
+                      let sqlDeletePhoto = `DELETE FROM photos WHERE link = 'default.jpg' AND offer_id = '${req.body.offerId}'`;
+                      let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
+                        if( err ) throw err;
+                        console.log(deletePhotoResult);
+                      });
                   }
 
-                });//Select Subject end
 
-                res.render( 'index', {hint: 'Udało się zmienić ofertę'});
-          }
-
-          else {
-
-            for (unnedenPhoto of req.files) {
-              fs.unlink(`./public/uploads/${unnedenPhoto.filename}`, function (err) {
-                if (err) throw err;
-                // if no error, file has been deleted successfully
-                console.log('File deleted!');
-              });
-            }
-
-              res.render( 'loginModify', {hint: 'Wrong code!', keepData: userData, keepDescription: offerData.description, keepBookTypes: bookTypes} );
-          }
-      });//queryForCode end
+                  res.render( 'index', {hint: 'Udało się zmienić ofertę'});
   //  });//upload End
-  },// modifyOffer
+  },
 
-  deletePhoto: function( req, res, db ) {
+  deletePhoto: function( req, res, db ){
+
+    let userData = {
+        username: offersToShow[0].username,
+        num: offersToShow[0].num,
+        email: offersToShow[0].email,
+        offerId: offersToShow[0].id
+    }
+
 
     console.log(req.body);
 
-    res.send(req.query.unlink);
-    /*
-    let sqlDeletePhoto = `DELETE FROM photos WHERE link = '${req.body.unlink}'`;
-    let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
-      if( err ) throw err;
-    });
-    */
+
+      let sqlDeletePhoto = `DELETE FROM photos WHERE link = '${req.body.unlink}'`;
+      let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
+        if( err ) throw err;
+        console.log(deletePhotoResult);
+      });
+//----------------------------ADD DEFAULT IF LAST
+      let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
+      let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
+        if (err)  throw err;
+        console.log(photosLengthResult);
+
+        if ( photosLengthResult.length == 0 ) {
+          insertDefaultPhoto( req.body.offerId, db);
+        }
+
+      })
+    console.log(offersToShow[0]);
+
+    for (let i = 0; i < offersToShow[0].links.length; i++)
+      if ( offersToShow[0].links[i] == req.body.unlink)
+        offersToShow[0].links.splice( i, 1 )
+
+    res.render( 'loginModify', {keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
+//------------------------
   }
 
 }//Module.Exports end

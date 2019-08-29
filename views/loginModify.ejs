@@ -39,7 +39,7 @@
                         <input type="text" placeholder="Login" name="login" disabled value="<%= keepData.username %>">
                         <input type="hidden" name="login" value="<%= keepData.username %>">
                         <input type="hidden" name="offerId" value="<%= keepData.offerId %>">
-                        <input type="text" placeholder="AccessCode" name="accessCode">
+                        <input type="hidden" name="firstPhoto" value="<%= keepPhotos[0] %>">
                         <label>Wybierz klasę</label>
                         <select name = "class" >
                             <option value="1">1</option>
@@ -98,12 +98,24 @@
                 <div class="HUJEC">
                   <% %>
                   <% for( link of keepPhotos){ %>
+                  <%    if( link != "default.jpg" ){ %>
                    <form class="" action="deletePhoto" method="post" enctype="multipart/form-data">
-                       <a target="_blank" href = "uploads/<%= link %>"><%= link %></a>
-                       <input type="text" name="unlink" value="<%= link %>">
-                       <button type="submit">Usuń zdjęcie</button>
+                       <a target="_blank" href = "uploads/<%= link %>" class = "linkPhoto" ><%= link %></a>
+                       <input type="hidden" name="unlink" value="<%= link %>">
+                       <input type="hidden" name="offerId" value="<%= keepData.offerId %>">
+
+                       <input type="hidden" name="loginDel">
+                       <input type="hidden" name="classDel">
+                       <input type="hidden" name="numberDel">
+                       <input type="hidden" name="emailDel">
+                       <input type="hidden" name="descriptionDel">
+
+                       <input id="process" type="hidden" name="searchList" value="">
+
+
+                       <button class='delete' type="submit">Usuń zdjęcie</button>
                    </form>
-                  <% } %>
+                  <% }} %>
                 </div>
 
             </section>
@@ -169,6 +181,7 @@
         </main>
         <footer></footer>
     </div>
+    <script src="js/searchController.js"></script>
     <script src="js/main.js"></script>
 
     <script>
@@ -190,6 +203,16 @@
       }//end for in
     }//end
     %>
+
+    window.onload = function(){
+      document.getElementsByName('loginDel').value = document.getElementsByName('login')[0].value;
+      document.getElementsByName('classDel').value = document.getElementsByName('class')[0].value;
+      document.getElementsByName('numberDel').value = document.getElementsByName('num')[0].value;
+      document.getElementsByName('emailDel').value = document.getElementsByName('email')[0].value;
+      document.getElementsByName('descriptionDel').value = document.getElementsByName('description')[0].value;
+
+    }
+
     </script>
 </body>
 

@@ -114,7 +114,6 @@ function openWindow(evt, type) {
 
     evt.currentTarget.className += " active";
     const $book = (evt.target).closest("article");
-    console.log($book)
     const $currentBook = $($book).attr('id');
 
     var i, window, buttons;
