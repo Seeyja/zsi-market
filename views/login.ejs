@@ -42,7 +42,8 @@
 
                     <div class="row">
                         <input type="text" placeholder="Login" name="login" value="<%= keepData.username %>">
-                        <input type="text" placeholder="AccessCode" name="accessCode">
+                        <input maxlength="15" pattern="\S+" required type="password" placeholder="Podaj hasło"
+                            name="password">
                         <label>Wybierz klasę</label>
                         <select name = "class" >
                             <option value="1">1</option>

@@ -28,6 +28,15 @@ function insertDefaultPhoto(offerId, db) {
   })
 
 }
+function deleteDefaultPhoto(offerId, db) {
+
+  let sqlPhotoOut = `DELETE FROM photos WHERE offer_id = ${offerId} AND link = "default.jpg"`;
+  let queryPhotoOut = db.query( sqlPhotoOut, (err, sqlPhotoOutResult)=>{
+    if( err ) throw err;
+    console.log(sqlPhotoOutResult);
+  })
+
+}
 
 let offersToShow;
 let confirmedOffersToShow;
@@ -166,6 +175,7 @@ module.exports = {
                 confirmedOffersToShow.push( offer );
 
           }
+          confirmedOffersToShow.reverse();
           res.render( 'index', {offersToShow: confirmedOffersToShow} );
         }
 
@@ -302,14 +312,16 @@ module.exports = {
 
                   console.log("ATTENTIONE"+req.body.firstPhoto);
 
-                  if ( req.files.length > 0 && req.body.firstPhoto == "default.jpg" ) {
+                  let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
+                  let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
+                  if (err)  throw err;
 
-                      let sqlDeletePhoto = `DELETE FROM photos WHERE link = 'default.jpg' AND offer_id = '${req.body.offerId}'`;
-                      let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
-                        if( err ) throw err;
-                        console.log(deletePhotoResult);
-                      });
-                  }
+                    if ( photosLengthResult.length > 1 && photosLengthResult[0].link == "default.jpg" ) {
+                      console.log("USUWAM ZDJECIE DOMYSLNE");
+                      deleteDefaultPhoto( req.body.offerId, db);
+                    }
+
+                  });
 
 
                   res.render( 'index', {hint: 'Udało się zmienić ofertę'});
@@ -318,16 +330,57 @@ module.exports = {
 
   deletePhoto: function( req, res, db ){
 
-    let userData = {
+/*    let userData = {
         username: offersToShow[0].username,
         num: offersToShow[0].num,
         email: offersToShow[0].email,
         offerId: offersToShow[0].id
+    }*/
+    let offerId = req.body.offerId
+    console.log("JAAADA "+offerId);
+    let userData = {
+        username: req.body.login,
+        num: req.body.num,
+        email: req.body.email,
+        code: req.body.password,
+        //class: req.body.class,   !
     }
+    let bookTypes = {
+        polish: req.body.polish,
+        english: req.body.english,
+        german: req.body.german,
+        history: req.body.history,
+        entrepreneurship: req.body.entrepreneurship,
+        geography: req.body.geography,
+        biology: req.body.biology,
+        chemistry: req.body.chemistry,
+        physics: req.body.physics,
+        math: req.body.math,
+        safety: req.body.safety,
+        religion: req.body.religion,
+        professionalCourses: req.body.professionalCourses,
+        society: req.body.society,
+        culture: req.body.culture,
+    }
+    let bookTypesArray =[];
 
-
+    console.log("req.body:");
     console.log(req.body);
 
+    for ( subject in bookTypes ){
+
+      if( typeof bookTypes[subject] !== 'undefined' ){
+
+        bookTypesArray.push(subject);
+
+      }//ifNotUndefined end
+    }//Subject for end
+
+    /*Dont show deleted photo
+    for (let i = 0; i < offersToShow[0].links.length; i++)
+      if ( offersToShow[0].links[i] == req.body.unlink)
+        offersToShow[0].links.splice( i, 1 )
+    */
 
       let sqlDeletePhoto = `DELETE FROM photos WHERE link = '${req.body.unlink}'`;
       let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
@@ -337,21 +390,31 @@ module.exports = {
 //----------------------------ADD DEFAULT IF LAST
       let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
       let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
+
         if (err)  throw err;
-        console.log(photosLengthResult);
 
         if ( photosLengthResult.length == 0 ) {
           insertDefaultPhoto( req.body.offerId, db);
         }
 
+
+
+        console.log("WER HERE ZIOMOOOO");
+        console.log(photosLengthResult);
+
+        let photoArray=[];
+        for (photo of photosLengthResult) {
+          photoArray.push( photo.link )
+        }
+
+        res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: req.body.description, keepBookTypes: req.body.searchList, keepPhotos: photoArray} );//photosLengthResult
+
       })
-    console.log(offersToShow[0]);
+    //console.log(photosLengthResult[0]);
 
-    for (let i = 0; i < offersToShow[0].links.length; i++)
-      if ( offersToShow[0].links[i] == req.body.unlink)
-        offersToShow[0].links.splice( i, 1 )
 
-    res.render( 'loginModify', {keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
+
+
 //------------------------
   }
 

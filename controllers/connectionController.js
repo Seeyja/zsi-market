@@ -3,7 +3,7 @@ const queryController = require('./queryController.js');
 const fs = require('fs');
 const multer = require('multer');
 
-const tymczasowyController = require('./tymczasowyController');
+//const tymczasowyController = require('./tymczasowyController');
 
 const upload = multer().none();
 

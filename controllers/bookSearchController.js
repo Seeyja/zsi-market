@@ -60,8 +60,9 @@ module.exports = function( app ){
                       num: foundModifyOffersResult[0].num,
                       email: foundModifyOffersResult[0].email,
 //                      code: foundModifyOffersResult[0].code,
-                      offerId: foundModifyOffersResult[0].id
+                      //offerId: foundModifyOffersResult[0].id
                   }
+                  let offerId = foundModifyOffersResult[0].id;
                   let bookTypes = {}
 
 
@@ -107,7 +108,7 @@ module.exports = function( app ){
 
                   console.log(typeof offersToShow[0].links);
 
-                  res.render( 'loginModify', {keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
+                  res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
               }
 
               else {

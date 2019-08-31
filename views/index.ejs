@@ -40,18 +40,23 @@
             <section class="add_book">
                 <form method="post" enctype = "multipart/form-data" action="books">
                     <div class="row">
-                        <input required type="text" placeholder="Użytkownik" name="login">
-                        <select required name="class">
-                            <option value="">Wybierz klasę</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                        <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}" required type="tel" placeholder="Numer"
-                             name="num">
-                         <span>||</span>
-                         <input required type="email" placeholder="Email" name="email">
+                      <div class="row">
+                      <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
+                      <input maxlength="15" pattern="\S+" required type="password" placeholder="Podaj hasło"
+                          name="password">
+                      <select required name="class">
+                          <option value="">Wybierz klasę</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                      </select>
+                      <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}" required type="tel" placeholder="666666666"
+                          name="num">
+                      <span>||</span>
+                      <input required type="email" placeholder="Email" name="email">
+                  </div>
+                  <div class="row clearfix">
                     </div>
                     <div class="row clearfix">
                        <textarea maxlength="150" placeholder="Opis" rows="6" name="description"></textarea>
@@ -202,6 +207,11 @@
 
                     <form action="modify" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="modifyInfo" value="">
+                      <input type="text" placeholder="AccessCode" name="accessCode" style="
+                          width: 135px;
+                          left: 90px;
+                          position: relative;
+                      ">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
                       <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
@@ -230,6 +240,11 @@
 
                     <form action="modify" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="modifyInfo" value="">
+                      <input type="text" placeholder="AccessCode" name="accessCode" style="
+                          width: 135px;
+                          left: 90px;
+                          position: relative;
+                      ">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
                       <a href="img/books-bg.jpg" data-lightbox="n2l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
@@ -368,6 +383,16 @@
     showOffers(clientSideResults, counter, "first");
 
     document.getElementById('nextButton').addEventListener('click', function(){
+      const articles = document.querySelectorAll("article");
+                    articles.forEach(function(article) {
+                        const links = article.querySelectorAll("a:nth-of-type(1)~a");
+                         links.forEach(function(link) {
+                                     link.remove();
+                           })
+                       
+                        console.log("ema");
+                        console.log(links);
+                    })
         //alert();
         counter++;
         showOffers(clientSideResults, counter, "next");
