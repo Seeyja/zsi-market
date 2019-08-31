@@ -21,25 +21,30 @@
 
 <body>
     <div class="wrapper">
-        <header class="clearfix">
-            <a href="/"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
-                    <li><a href="#"><i class="fas fa-user-circle"></i>Konto</a></li>
-                    <li><a href="#"><i class="fas fa-shopping-cart"></i>Koszyk</a></li>
-                </ul>
-            </nav>
-        </header>
+      <header class="clearfix">
+          <a href="/"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
+          <nav>
+              <ul>
+                  <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
+              </ul>
+          </nav>
+
+
+          <form class="my_offers" method="get" action="books">
+            <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
+            <button onclick="findSubjects()" type="submit">Moje oferty</button>
+          </form>
+
+
+      </header>
         <main>
             <section class="add_book">
                 <form autocomplete="off" method="post" enctype="multipart/form-data" action="sendmodification">
 
                     <div class="row">
-                        <input type="text" placeholder="Login" name="login" disabled value="<%= keepData.username %>">
+                        <input type="text" placeholder="Login" name="loginDisabled" disabled value="<%= keepData.username %>">
                         <input type="hidden" name="login" value="<%= keepData.username %>">
-                        <input type="hidden" name="offerId" value="<%= keepData.offerId %>">
-                        <input type="hidden" name="firstPhoto" value="<%= keepPhotos[0] %>">
+                        <input type="hidden" name="offerId" value="<%= offerId %>">
                         <label>Wybierz klasę</label>
                         <select name = "class" >
                             <option value="1">1</option>
@@ -97,23 +102,21 @@
 
                 <div class="HUJEC">
                   <% %>
-                  <% for( link of keepPhotos){ %>
-                  <%    if( link != "default.jpg" ){ %>
+                  <% for( one of keepPhotos){ %>
+                  <%    if( one != "default.jpg" ){ %>
                    <form class="" action="deletePhoto" method="post" enctype="multipart/form-data">
-                       <a target="_blank" href = "uploads/<%= link %>" class = "linkPhoto" ><%= link %></a>
-                       <input type="hidden" name="unlink" value="<%= link %>">
-                       <input type="hidden" name="offerId" value="<%= keepData.offerId %>">
-
-                       <input type="hidden" name="loginDel">
-                       <input type="hidden" name="classDel">
-                       <input type="hidden" name="numberDel">
-                       <input type="hidden" name="emailDel">
-                       <input type="hidden" name="descriptionDel">
-
+                       <a target="_blank" href = "uploads/<%= one %>" class = "linkPhoto" ><%= one %></a>
+                       <input type="hidden" name="unlink" value="<%= one %>">
+                       <input type="hidden" id="loginDel" name="login" value="">
+                       <input type="hidden" id="classDel" name="class" value="">
+                       <input type="hidden" id="numberDel" name="num">
+                       <input type="hidden" id="emailDel" name="email">
+                       <input type="hidden" id="descriptionDel" name="description">
+                       <input type="hidden" id="offerIdDel" name="offerId">
                        <input id="process" type="hidden" name="searchList" value="">
 
 
-                       <button class='delete' type="submit">Usuń zdjęcie</button>
+                       <button id = "submitDeleteBtn" class='delete' type="submit">Usuń zdjęcie</button>
                    </form>
                   <% }} %>
                 </div>
@@ -191,9 +194,17 @@
 
     <% } %>
     <%
-    if ( typeof keepBookTypes !== "undefined"){
-      for ( subject of keepBookTypes ){
+    console.log("I AM GONNA CLEAN THIS RLY");
+    console.log( typeof "keepBookTypes");
 
+    let arrayFromString;
+    if ( typeof keepBookTypes == "string")
+        arrayFromString = keepBookTypes.split(' ');
+    else
+        arrayFromString = keepBookTypes;
+
+    if ( typeof arrayFromString !== "undefined"){
+      for ( subject of arrayFromString ){
         if( typeof subject !== 'undefined' ){
           console.log(subject);
         %>
@@ -204,15 +215,20 @@
     }//end
     %>
 
-    window.onload = function(){
-      document.getElementsByName('loginDel').value = document.getElementsByName('login')[0].value;
-      document.getElementsByName('classDel').value = document.getElementsByName('class')[0].value;
-      document.getElementsByName('numberDel').value = document.getElementsByName('num')[0].value;
-      document.getElementsByName('emailDel').value = document.getElementsByName('email')[0].value;
-      document.getElementsByName('descriptionDel').value = document.getElementsByName('description')[0].value;
+    function getAndSetData(){
+
+      //Everything in for 4 every
+      document.getElementsByName('login').forEach( single => {single.value = document.getElementsByName('login')[1].value; } )
+      document.getElementsByName('class').forEach( single => {single.value = document.getElementsByName('class')[0].value; } )
+      document.getElementsByName('num').forEach( single => {single.value = document.getElementsByName('num')[0].value; } )
+      document.getElementsByName('email').forEach( single => {single.value = document.getElementsByName('email')[0].value; } )
+      document.getElementsByName('description').forEach( single => {single.value = document.getElementsByName('description')[0].value; } )
+      document.getElementsByName('offerId').forEach( single => {single.value = document.getElementsByName('offerId')[0].value; } )
+      //document.getElementsByName('process').forEach( single => {single.value = document.getElementById('process2').value;
 
     }
-
+    document.getElementById('submitDeleteBtn').addEventListener('mouseenter', getAndSetData); //change to another listener
+    document.getElementById('submitDeleteBtn').addEventListener('mouseenter', findSelectedSubjects); //change to another listener
     </script>
 </body>
 

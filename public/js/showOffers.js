@@ -20,9 +20,9 @@ function showOffers(offersOnClientSide, counter, direction ){
     switch (direction) {
       case "first": break;
       case "next": for (let j = 0; j < 5; j++)
-                    document.getElementById(`n${j}`).setAttribute("id", `n${ j+counter*5 }`);break;
+                    document.getElementById(`n${ j+(counter-1)*5 }`).setAttribute("id", `n${ j+counter*5 }`);break;
       case "prev": for (let j = 0; j < 5; j++)
-                    document.getElementById(`n${j+(counter+1)*5}`).setAttribute("id", `n${ j }`);break;
+                    document.getElementById(`n${j+(counter+1)*5}`).setAttribute("id", `n${ j+counter*5 }`);break;
       default: console.log("sth wrong in switch"); res.render('index');
 
     }
@@ -97,5 +97,58 @@ function showOffers(offersOnClientSide, counter, direction ){
 
 
     }
+
+
+
+
+
+ const articles = document.querySelectorAll("article");
+
+
+// for(let i=0;i < offersOnClientSide.length;i++){
+
+// console.log(offersOnClientSide);
+
+// for(let i=0;i < offersOnClientSide[i].links.length;i++){
+// 	 currentPhotos = offersOnClientSide[i].links;
+
+// const article = document.querySelector("article");
+
+// 	  const id = article.getAttribute("id");
+// 	  // console.log(id);
+// 	  console.log("siema")
+
+// 	  const lightboxImgs = document.createElement('a');
+//             lightboxImgs.href = `uploads/${currentPhotos}`;
+//       const figure = document.createElement('figure');
+//       const fotos = document.createElement('img');
+//             fotos.src = `uploads/${currentPhotos}`;
+
+//             article.appendChild(lightboxImgs);
+//             lightboxImgs.appendChild(figure);
+//             figure.appendChild(fotos);
+//             // figure.append(fotos);
+//             // lightboxEl.append(figure);
+//             // currentOffer.append( lightboxEl )
+
+
+// }
+
+// }
+
+
+articles.forEach(function (article) {
+
+    const id = article.getAttribute("id");
+    const lightboxImages = article.querySelectorAll("a");
+
+    lightboxImages.forEach(function (lightboxImg){
+          lightboxImg.setAttribute( 'data-lightbox', `${id}l`);
+    })
+
+    console.log(id);
+    article.classList.add("test");
+
+})
 
 }

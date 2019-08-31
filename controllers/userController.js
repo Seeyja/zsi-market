@@ -10,18 +10,18 @@ module.exports = {
 
 
         let description = req.body.description;
-
+/*
         let code;
         do{
           code = Math.floor(Math.random()*1000000);
         } while(code < 100000)
-
+*/
         let userData = {
             username: req.body.login,
             num: req.body.num,
             email: req.body.email,
-            code: code,
-            class: req.body.class,
+            code: req.body.password,
+            //class: req.body.class,   !
         }
         let bookTypes = {
             polish: req.body.polish,
@@ -66,51 +66,51 @@ module.exports = {
 
                 });
 
-                res.render( 'index', {hint: 'User and offer added...'} );
+                res.render( 'index', {hint: `Witaj ${userData.username} ! Ogłoszenie dodane Twoje hasło do zmian w ogłoszeniu: ${userData.code}`} );
 
             }
             else {
 
-              offerData.user_id = foundUsers[0].id;
-              entryCode = foundUsers[0].code
+                offerData.user_id = foundUsers[0].id;
+                entryCode = foundUsers[0].code
 
-              if ( typeof req.body.accessCode == 'undefined' ){
+                if ( typeof userData.code == 'undefined' ){
 
-                for (unnedenPhoto of req.files) {
+                  for (unnedenPhoto of req.files) {
 
-                  fs.unlink(`./public/uploads/${unnedenPhoto.filename}`, function (err) {
-                    if (err) throw err;
-                    // if no error, file has been deleted successfully
-                    console.log('File deleted!');
-                  });
+                    fs.unlink(`./public/uploads/${unnedenPhoto.filename}`, function (err) {
+                      if (err) throw err;
+                      // if no error, file has been deleted successfully
+                      console.log('File deleted!');
+                    });
+
+                  }
+
+                  res.render( 'login', {hint: 'There is already user like that! Enter your code:', entryCode: entryCode, keepData: userData, keepDescription: offerData.description, keepPhotos: keepPhotos, keepBookTypes: bookTypes} );
+                }
+                else if( userData.code === entryCode ){
+
+                  queryController.insertSetAndOffer( setData, offerData, bookTypes, keepPhotos, req, db )
+
+
+
+                  res.render( 'index', {hint: 'Offer added to existing user'} );
 
                 }
+                else{
+                  for (unnedenPhoto of req.files) {
 
-                res.render( 'login', {hint: 'There is already user like that! Enter your code:', entryCode: entryCode, keepData: userData, keepDescription: offerData.description, keepPhotos: keepPhotos, keepBookTypes: bookTypes} );
-              }
-              else if( req.body.accessCode === entryCode ){
+                    fs.unlink(`./public/uploads/${unnedenPhoto.filename}`, function (err) {
+                      if (err) throw err;
+                      // if no error, file has been deleted successfully
+                      console.log('File deleted!');
+                    });
 
-                queryController.insertSetAndOffer( setData, offerData, bookTypes, keepPhotos, req, db )
-
-
-
-                res.render( 'index', {hint: 'Offer added to existing user'} );
-
-              }
-              else{
-                for (unnedenPhoto of req.files) {
-
-                  fs.unlink(`./public/uploads/${unnedenPhoto.filename}`, function (err) {
-                    if (err) throw err;
-                    // if no error, file has been deleted successfully
-                    console.log('File deleted!');
-                  });
-
+                  }
+                  res.render( 'login', {hint: 'Wrong access Code!', keepData: userData, keepDescription: offerData.description, keepBookTypes: bookTypes} );
                 }
-                res.render( 'login', {hint: 'Wrong access Code!', keepData: userData, keepDescription: offerData.description, keepBookTypes: bookTypes} );
-              }
 
-          }//Foundusers else statement end
+            }//Foundusers else statement end
       });//Main query end
   },//addOffer end
 
