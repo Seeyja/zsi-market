@@ -1,7 +1,6 @@
 const multer = require('multer');
 const path = require('path');
 const queryController = require('./queryController.js');
-const queries = require('./queries2.js');
 const mysql = require( 'mysql' );
 
 const connectionController = require('./connectionController');

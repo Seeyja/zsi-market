@@ -176,12 +176,17 @@ module.exports = {
 
           }
           confirmedOffersToShow.reverse();
-          res.render( 'index', {offersToShow: confirmedOffersToShow} );
+
+          if (confirmedOffersToShow.length == 0)
+            res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto zawierające niektóre:"} );
+
+          else
+            res.render( 'index', {offersToShow: confirmedOffersToShow, type: "default"} );
         }
 
         else{
           offersToShow.reverse();
-          res.render( 'index', {offersToShow: offersToShow} );
+          res.render( 'index', {offersToShow: offersToShow, type: "login"} );
         }
 
 
