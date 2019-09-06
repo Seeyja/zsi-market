@@ -160,6 +160,13 @@
             <form class="offers" action="books" method="get" >
 
                 <input id="process" type="hidden" name="searchList" value="">
+                <select required name="class">
+                    <option value="">Wybierz klasę</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
                 <button onclick="findSubjects()" type="submit">Znajdź Oferty</button>
 
             </form>
@@ -172,7 +179,7 @@
 
                   <article id="n0" class="book">
 
-                    <form action="modify" method="post" enctype="multipart/form-data">
+                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
                       <input type="hidden" name="modifyInfo" value="">
                       <input type="text" placeholder="AccessCode" name="accessCode" style="
                           width: 135px;
@@ -205,7 +212,7 @@
                   </article>
                   <article id="n1" class="book">
 
-                    <form action="modify" method="post" enctype="multipart/form-data">
+                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
                       <input type="hidden" name="modifyInfo" value="">
                       <input type="text" placeholder="AccessCode" name="accessCode" style="
                           width: 135px;
@@ -238,7 +245,7 @@
                   </article>
                   <article id="n2" class="book">
 
-                    <form action="modify" method="post" enctype="multipart/form-data">
+                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
                       <input type="hidden" name="modifyInfo" value="">
                       <input type="text" placeholder="AccessCode" name="accessCode" style="
                           width: 135px;
@@ -271,8 +278,13 @@
                   </article>
                   <article id="n3" class="book">
 
-                    <form action="modify" method="post" enctype="multipart/form-data">
+                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
                       <input type="hidden" name="modifyInfo" value="">
+                      <input type="text" placeholder="AccessCode" name="accessCode" style="
+                          width: 135px;
+                          left: 90px;
+                          position: relative;
+                      ">
                       <button class="modify" type="submit">Modyfikuj</button>
                     </form>
                       <a href="img/books-bg.jpg" data-lightbox="n3l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
@@ -299,10 +311,15 @@
                   </article>
                   <article id="n4" class="book">
 
-                    <form action="modify" method="post" enctype="multipart/form-data">
-                      <input type="hidden" name="modifyInfo" value="">
-                      <button class="modify" type="submit">Modyfikuj</button>
-                    </form>
+                      <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
+                        <input type="hidden" name="modifyInfo" value="">
+                        <input type="text" placeholder="AccessCode" name="accessCode" style="
+                            width: 135px;
+                            left: 90px;
+                            position: relative;
+                        ">
+                        <button class="modify" type="submit">Modyfikuj</button>
+                      </form>
                       <a href="img/books-bg.jpg" data-lightbox="n5l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
                       <div class="inner_row">
@@ -381,23 +398,17 @@
 
     let counter = 0;
     showOffers(clientSideResults, counter, "first");
-
+    <% if (typeof type != "undefined"){ %>
+    hideForm(`<%= type %>`)
+    <% } %>
     document.getElementById('nextButton').addEventListener('click', function(){
-      const articles = document.querySelectorAll("article");
-                    articles.forEach(function(article) {
-                        const links = article.querySelectorAll("a:nth-of-type(1)~a");
-                         links.forEach(function(link) {
-                                     link.remove();
-                           })
-                       
-                        console.log("ema");
-                        console.log(links);
-                    })
+        cleanPhotos();
         //alert();
         counter++;
         showOffers(clientSideResults, counter, "next");
     });
     document.getElementById('prevButton').addEventListener('click', function(){
+        cleanPhotos();
         //alert();
         counter--;
         showOffers(clientSideResults, counter, "prev");

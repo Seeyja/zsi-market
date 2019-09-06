@@ -1,5 +1,5 @@
 function showOffers(offersOnClientSide, counter, direction ){
-  console.log(offersOnClientSide);
+    console.log(offersOnClientSide);
 
     let seenableOffers = [];
     let currentPhotos = [];
@@ -18,6 +18,7 @@ function showOffers(offersOnClientSide, counter, direction ){
       document.getElementById('nextButton').style.display = "inline-block"
 
     switch (direction) {
+
       case "first": break;
       case "next": for (let j = 0; j < 5; j++)
                     document.getElementById(`n${ j+(counter-1)*5 }`).setAttribute("id", `n${ j+counter*5 }`);break;
@@ -26,10 +27,10 @@ function showOffers(offersOnClientSide, counter, direction ){
       default: console.log("sth wrong in switch"); res.render('index');
 
     }
+
     for (let j = 0; j < 5; j++) document.getElementById(`n${j+(counter)*5}`).setAttribute("id", `n${ j+counter*5 }`)
 
     let end;
-
 
     for (i = 0 + (counter)*5; i < 5+(counter)*5 && i < offersOnClientSide.length ; i++) {
 
@@ -150,5 +151,27 @@ articles.forEach(function (article) {
     article.classList.add("test");
 
 })
+
+}
+
+function cleanPhotos(){
+
+
+              const articles = document.querySelectorAll("article");
+
+              articles.forEach( (article) => {
+                  const links = article.querySelectorAll("a:nth-of-type(1)~a");
+                  links.forEach( (link) => { link.remove(); })
+
+                  console.log("ema");
+                  console.log(links);
+              })
+}
+
+function hideForm(type){
+
+  if ( type == "login" ){
+    document.getElementsByName("modify").forEach( ( form ) => { form.style.display = "inline-block"; } )
+  }
 
 }
