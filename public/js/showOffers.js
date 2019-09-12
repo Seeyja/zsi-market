@@ -12,7 +12,7 @@ function showOffers(offersOnClientSide, counter, direction ){
       document.getElementById('prevButton').style.display = "inline-block"
 
 
-    if ( (counter+1)*5 >= offersOnClientSide.length || offersOnClientSide.length == 10)
+    if ( (counter+1)*5 >= offersOnClientSide.length )
       document.getElementById('nextButton').style.display = "none"
     else
       document.getElementById('nextButton').style.display = "inline-block"
@@ -73,7 +73,7 @@ function showOffers(offersOnClientSide, counter, direction ){
 
 
 
-        currentChildnodes[7].innerHTML = `<p>${offersOnClientSide[i].description}</p>`;
+        currentChildnodes[7].innerHTML = `<p>${offersOnClientSide[i].description}</p><p style="color: red">Do klasy ${offersOnClientSide[i].class}</p>`;
         currentChildnodes[9].innerHTML = `<p>Użytkownik: ${offersOnClientSide[i].username}</p> <p> Telefon: ${offersOnClientSide[i].num}</p>  <p>Email: ${offersOnClientSide[i].email}`;
 
         currentChildnodes[11].innerHTML = "";
@@ -147,7 +147,7 @@ articles.forEach(function (article) {
           lightboxImg.setAttribute( 'data-lightbox', `${id}l`);
     })
 
-    console.log(id);
+    //console.log(id);
     article.classList.add("test");
 
 })
