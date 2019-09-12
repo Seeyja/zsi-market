@@ -105,7 +105,7 @@ module.exports = {
 
   },
 
-  findOffers: function(query, req, res, db, requiredSubjectsString){
+  findOffers: function(query, req, res, db, requiredSubjectsString, searchType){
 
     if ( typeof requiredSubjectsString != "undefined")
         requiredSubjects = requiredSubjectsString.split(' ');
@@ -153,45 +153,70 @@ module.exports = {
         }//For transformacja end
 
         //Show if offer includes all checked subjects
+        if ( searchType == "byLogin"){
 
-        if ( typeof requiredSubjectsString != "undefined" ){
-          for ( offer of offersToShow ) {
+          offersToShow.reverse();
 
-//            console.log( offer );
-
-              let toAddFlag = 0;
-              let confirmationArray = [];
-
-              for ( subject of requiredSubjects ) {
-
-                  if ( offer.subjects.includes( subject ) )
-                    confirmationArray.push( 1 );
-                  else
-                    confirmationArray.push( 0 );
-
-              }
-
-              if ( !confirmationArray.includes( 0 ) )
-                confirmedOffersToShow.push( offer );
-
-          }
-          confirmedOffersToShow.reverse();
-
-          if (confirmedOffersToShow.length == 0)
-            res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto zawierające niektóre:"} );
+          if ( offersToShow.length == 0 )
+            res.render( 'index', {offersToShow: offersToShow, type: "login", hint:"Nie masz żadnych aktualnych ofert"} );
 
           else
-            res.render( 'index', {offersToShow: confirmedOffersToShow, type: "default"} );
+            res.render( 'index', {offersToShow: offersToShow, type: "login"} );
+
         }
 
-        else{
-          offersToShow.reverse();
-          res.render( 'index', {offersToShow: offersToShow, type: "login"} );
+        if ( searchType == "byClass" ) {
+
+          if ( offersToShow.length == 0 )
+            res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie mamy aktualnie ofert dla tej klasy"} );
+          else
+            res.render( 'index', {offersToShow: offersToShow, type: "default"} );
+
         }
 
+        if ( searchType == "bySubject" ) {
+
+            for ( offer of offersToShow ) {
+
+  //            console.log( offer );
+                let toAddFlag = 0;
+                let confirmationArray = [];
+
+                for ( subject of requiredSubjects ) {
+
+                    if ( offer.subjects.includes( subject ) )
+                      confirmationArray.push( 1 );
+                    else
+                      confirmationArray.push( 0 );
+
+                }
+
+                if ( !confirmationArray.includes( 0 ) )
+                  confirmedOffersToShow.push( offer );
+
+            }
+
+            confirmedOffersToShow.reverse();
+
+            if ( confirmedOffersToShow.length == 0 ){
+
+              if ( offersToShow.length == 0 )
+                res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych szukane książki."} );
+
+              else
+                res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto oferty zawierające niektóre z nich"} );
+
+            }
+
+            else{
+
+              res.render( 'index', {offersToShow: confirmedOffersToShow, type: "default"} );
+
+            }
+
+          }
 
 
-//        console.log(offersToShow);
 
 
 

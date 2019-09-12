@@ -11,7 +11,7 @@ const db = connectionController.db;
 const storage = multer.diskStorage({
   destination: './public/uploads',
   filename: function(req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname) );
+    cb(null, file.fieldname + '-' + Date.now() + Math.floor( ( Math.random() * 100 ) + 1 ) + path.extname(file.originalname) );
   }
 })
 
@@ -47,34 +47,60 @@ module.exports = function( app ){
   app.get( '/books', ( req, res )=>{
 
     let sqlOffersQuery;
-
+    let searchType;
+    //Look for specific subjects
     if ( typeof req.query.searchList != "undefined" ) {
 
-      let subjectListString = req.query.searchList.replace(/ /gi, '" OR book_type.subject = "');
-      sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
-                              offers  INNER JOIN users ON offers.user_id = users.id
-                                      INNER JOIN photos ON photos.offer_id = offers.id
-                                      INNER JOIN sets ON sets.offer_id = offers.id
+      if ( req.query.searchList == "" ) {
 
-                                      RIGHT JOIN book_type ON book_type.id = sets.book_type_id
-                                      WHERE sets.offer_id IN
-                                      (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
-                                        WHERE book_type.subject = "${subjectListString}" )` ;
+        console.log('i am here');
+
+        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
+                                offers  INNER JOIN users ON offers.user_id = users.id
+                                        INNER JOIN photos ON photos.offer_id = offers.id
+                                        INNER JOIN sets ON sets.offer_id = offers.id
+                                        RIGHT JOIN book_type ON book_type.id = sets.book_type_id
+                                        WHERE offers.active = 1
+                                        AND photos.active = 1
+                                        AND book_type.class = ${ req.query.class }` ;
+        searchType="byClass";
+
+      }
+      else {
+        let subjectListString = req.query.searchList.replace(/ /gi, '" OR book_type.subject = "');
+        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
+                                offers  INNER JOIN users ON offers.user_id = users.id
+                                        INNER JOIN photos ON photos.offer_id = offers.id
+                                        INNER JOIN sets ON sets.offer_id = offers.id
+                                        RIGHT JOIN book_type ON book_type.id = sets.book_type_id
+                                        WHERE sets.offer_id IN
+                                          (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
+                                          WHERE book_type.subject = "${subjectListString}" )
+                                        AND offers.active = 1
+                                        AND photos.active = 1
+                                        AND book_type.class = ${ req.query.class }` ;
+        searchType="bySubject";
+
+      }
+
+
     } else if ( typeof req.query.login != "undefined" ) {
 
       req.query.searchList = undefined;
 
-      sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
+      sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date, offers.active FROM
                                                               offers  INNER JOIN users ON offers.user_id = users.id
                                                                       INNER JOIN photos ON photos.offer_id = offers.id
                                                                       INNER JOIN sets ON sets.offer_id = offers.id
                                                                       INNER JOIN book_type ON book_type.id = sets.book_type_id
                                                                       WHERE sets.offer_id IN
-                                                                      (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
-                                                                      WHERE users.username = "${req.query.login}" )` ;
+                                                                        (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
+                                                                        WHERE users.username = "${req.query.login}" )
+                                                                      AND photos.active = 1` ;
+      searchType="byLogin";
     } else res.send('something went wrong');
 
-    queryController.findOffers(sqlOffersQuery, req, res, db, req.query.searchList);
+    queryController.findOffers(sqlOffersQuery, req, res, db, req.query.searchList, searchType);
 
   } );
 
@@ -110,6 +136,15 @@ module.exports = function( app ){
     upload( req, res, ( err )=>{
 
       queryController.modifyOffer( req, res, db );
+
+    }) //Upload end
+  });
+
+  app.post( '/modifySet',  ( req, res )=>{
+
+    upload( req, res, ( err )=>{
+
+      queryController.modifySet( req, res, db );
 
     }) //Upload end
   });
