@@ -21,93 +21,100 @@
 <body>
     <div class="wrapper">
         <header class="clearfix">
-            <a href="/"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
+            <a href="http://sellfast.pl"><figure class="logo"><img src="img/logo.png" alt="logo"></figure></a>
             <nav>
                 <ul>
-                    <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li>
+                    <!-- <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li> -->
                 </ul>
             </nav>
 
 
             <form class="my_offers" method="get" action="books">
-              <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
-              <button onclick="findSubjects()" type="submit">Moje oferty</button>
+                <span class="info"><img  alt="Wskazówka" title="Porada" src="img/advice.png"></img>Wprowadź nazwę by wyświetlić swoje aktualne oferty.</span>
+                <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
+                <button onclick="findSubjects()" type="submit">Moje oferty</button>
             </form>
 
 
         </header>
         <main>
             <section class="add_book">
-                <form method="post" enctype = "multipart/form-data" action="books">
+                <h2>Dodaj książkę</h2>
+                <form method="post" enctype="multipart/form-data" action="books">
                     <div class="row">
-                      <div class="row">
-                      <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
-                      <input maxlength="15" pattern="\S+" required type="password" placeholder="Podaj hasło"
-                          name="password">
-                      <select required name="class">
-                          <option value="">Wybierz klasę</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                      </select>
-                      <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}" required type="tel" placeholder="Podaj numer"
-                          name="num">
-                      <span>||</span>
-                      <input required type="email" placeholder="Email" name="email">
-                  </div>
-                  <div class="row clearfix">
-                    </div>
-                    <div class="row clearfix">
-                       <textarea maxlength="150" placeholder="Opis" rows="6" name="description"></textarea>
-                        <fieldset>
-                            <legend>Wybierz przedmioty</legend>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="polish"><span>Język polski</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="english"><span>Język angielski</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="german"><span>Język niemiecki</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="history"><span>Historia</label>
-                                <label><input class="items_checkbox animationfix" type="checkbox" name="entrepreneurship"><span>P.przedsiębiorczości</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="geography"><span>Geografia</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="biology"><span>Biologia</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="chemistry"><span>Chemia</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="physics"><span>Fizyka</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="math"><span>Matematyka</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox" name="safety"><span>EDB</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="religion"><span>Religia</span></label>
-                            <label><input class="items_checkbox animationfix"
-                                    type="checkbox" name="professionalCourses"><span>Przedmioty zawodowe</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox" name="society"><span>WOS</span></label>
-                            <label><input class="items_checkbox animationfix" type="checkbox" name="culture"><span>WOK</span></label>
-                        </fieldset>
-                        <span>Określ cenę</span>
-                        <div class="inner_row">
-
-                            <div id="html5"></div>
-                            <input type="number" id="input-select" min="0" max="100" step="1" id="input-number">
-                            <input type="number" min="0" max="100" step="1" id="input-number">
-
-                            <input type="file" name="files" id="file" data-multiple-caption="{count} zdjęcia wybrane" multiple />
-                            <label for="file"><span>Dodaj zdjęcia</span></label>
+                        <div class="row">
+                            <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik"
+                                name="login">
+                            <input maxlength="15" pattern="\S+" required type="password" placeholder="Hasło"
+                                name="password">
+                            <select required name="class">
+                                <option value="">Do klasy</option>
+                                <option value="1">1 - Pierwszej</option>
+                                <option value="2">2 - Drugiej</option>
+                                <option value="3">3 - Trzeciej</option>
+                                <option value="4">4 - Czwartej</option>
+                            </select>
+                            <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}|[0-9]{3}-[0-9]{3}-[0-9]{3}" required type="tel"
+                                placeholder="Telefon" name="num">
+                            <span>||</span>
+                            <input required type="email" placeholder="Email" name="email">
                         </div>
-                    </div>
-                    <div class="row">
-                        <button type="submit">Dodaj książkę</button>
-                    </div>
+                        <div class="row clearfix">
+                        </div>
+                        <div class="row clearfix">
+                            <textarea maxlength="150" placeholder="Opis" rows="6" name="description"></textarea>
+                            <fieldset>
+                                <legend>Wybierz przedmioty</legend>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="polish"
+                                        required><span>Język polski</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="english"
+                                        required><span>Język angielski</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="german"
+                                        required><span>Język niemiecki</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="history"
+                                        required><span>Historia</label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="entrepreneurship" required><span>P.przedsiębiorczości</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="geography"
+                                        required><span>Geografia</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="biology"
+                                        required><span>Biologia</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="chemistry"
+                                        required><span>Chemia</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="physics"
+                                        required><span>Fizyka</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="math"
+                                        required><span>Matematyka</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="safety"
+                                        required><span>EDB</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="religion"
+                                        required><span>Religia</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox"
+                                        name="professionalCourses" required><span>Przedmioty zawodowe</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="society"
+                                        required><span>WOS</span></label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="culture"
+                                        required><span>WOK</span></label>
+                            </fieldset>
+                            <span>Określ cenę</span>
+                            <div class="inner_row">
+
+                                <div id="html5"></div>
+                                <input name="price_from" type="number" id="input-select" min="0" max="500" step="1" id="input-number">
+                                <input name="price_to" type="number" min="0" max="500" step="1" id="input-number">
+
+                                <input type="file" name="files" id="file"
+                                    data-multiple-caption="{count} zdjęcia wybrane" multiple />
+                                <label for="file"><span>Dodaj zdjęcia</span></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit">Dodaj ofertę</button>
+                        </div>
                 </form>
             </section>
 
             <section class="select_category">
-                <h2>Jakie książki Cię interesują?</h2>
+                <h2>Znajdź książkę</h2>
                 <figure class="category"><img src="img/poland.png" alt="polish">
                     <figcaption>J.polski</figcaption>
                 </figure>
@@ -156,8 +163,8 @@
 
             </section>
 
-        <!--<form class="offers" action="search" method="post" enctype="multipart/form-data"> -->
-            <form class="offers" action="books" method="get" >
+            <!--<form class="offers" action="search" method="post" enctype="multipart/form-data"> -->
+            <form class="offers" action="books" method="get">
 
                 <input id="process" type="hidden" name="searchList" value="">
                 <select required name="class">
@@ -172,176 +179,187 @@
             </form>
 
             <section class="books">
-                <i id ="prevButton" class="fas fa-arrow-circle-left"></i>
-                <i id ="nextButton" class="fas fa-arrow-circle-right"></i>
-                <h2>Wybierz ofertę dla siebie</h2>
+                <i id="prevButton" class="fas fa-arrow-circle-left"></i>
+                <i id="nextButton" class="fas fa-arrow-circle-right"></i>
+                <h2 style="display: none;">Znalezione oferty</h2>
+                <span style="display: none;" class="info"><img  alt="Wskazówka" title="Porada" src="img/advice.png"></img>Wprowadź hasło, by edytować ofertę.</span>
                 <div class="row">
 
-                  <article id="n0" class="book">
+                    <article id="n0" class="book">
 
-                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
-                      <input type="hidden" name="modifyInfo" value="">
-                      <input type="text" placeholder="AccessCode" name="accessCode" style="
-                          width: 135px;
-                          left: 90px;
+                        <form action="modify" name="modify" method="post" enctype="multipart/form-data"
+                            style="display: none;">
+                            <input type="hidden" name="modifyInfo" value="">
+                            <input type="password" placeholder="Hasło" name="accessCode" style="
+                          width: 137px;
+                          left: 88px;
                           position: relative;
+                          border-radius: 0;
                       ">
-                      <button class="modify" type="submit">Modyfikuj</button>
-                    </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n0l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                            <button class="modify" type="submit">Modyfikuj</button>
+                        </form>
+                        <a href="img/books-bg.jpg" data-lightbox="n0l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
-                      <div class="inner_row">
-                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
-                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
-                      </div>
-                      <section id="description" class="window">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                      </section>
-                      <section id="contact" class="window">
-                          <p>Użytkownik: Bejcu</p>
-                          <p>Telefon: 666-666-666</p>
-                          <p> Email: wp@gmail.pl</p>
-                      </section>
-                      <section id="items" class="window">
-                          <p>Chemia</p>
-                          <p>Fizyka</p>
-                          <p>J.angielski</p>
-                      </section>
-                  </article>
-                  <article id="n1" class="book">
+                        <div class="inner_row">
+                            <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                            <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                        </div>
+                        <section id="description" class="window">
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                                consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                        </section>
+                        <section id="contact" class="window">
+                            <p>Użytkownik: Bejcu</p>
+                            <p>Telefon: 666-666-666</p>
+                            <p> Email: wp@gmail.pl</p>
+                        </section>
+                        <section id="items" class="window">
+                            <p>Chemia</p>
+                            <p>Fizyka</p>
+                            <p>J.angielski</p>
+                        </section>
+                    </article>
+                    <article id="n1" class="book">
 
-                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
-                      <input type="hidden" name="modifyInfo" value="">
-                      <input type="text" placeholder="AccessCode" name="accessCode" style="
-                          width: 135px;
-                          left: 90px;
+                        <form action="modify" name="modify" method="post" enctype="multipart/form-data"
+                            style="display: none;">
+                            <input type="hidden" name="modifyInfo" value="">
+                            <input type="password" placeholder="Hasło" name="accessCode" style="
+                          width: 137px;
+                          left: 88px;
                           position: relative;
+                          border-radius: 0;
                       ">
-                      <button class="modify" type="submit">Modyfikuj</button>
-                    </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                            <button class="modify" type="submit">Modyfikuj</button>
+                        </form>
+                        <a href="img/books-bg.jpg" data-lightbox="n1l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
-                      <div class="inner_row">
-                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
-                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
-                      </div>
-                      <section id="description" class="window">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                      </section>
-                      <section id="contact" class="window">
-                          <p>Użytkownik: Bejcu</p>
-                          <p>Telefon: 666-666-666</p>
-                          <p>Email: wp@gmail.pl</p>
-                      </section>
-                      <section id="items" class="window">
-                          <p>Chemia</p>
-                          <p>Fizyka</p>
-                          <p>J.angielski</p>
-                      </section>
-                  </article>
-                  <article id="n2" class="book">
+                        <div class="inner_row">
+                            <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                            <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                        </div>
+                        <section id="description" class="window">
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                                consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                        </section>
+                        <section id="contact" class="window">
+                            <p>Użytkownik: Bejcu</p>
+                            <p>Telefon: 666-666-666</p>
+                            <p>Email: wp@gmail.pl</p>
+                        </section>
+                        <section id="items" class="window">
+                            <p>Chemia</p>
+                            <p>Fizyka</p>
+                            <p>J.angielski</p>
+                        </section>
+                    </article>
+                    <article id="n2" class="book">
 
-                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
-                      <input type="hidden" name="modifyInfo" value="">
-                      <input type="text" placeholder="AccessCode" name="accessCode" style="
-                          width: 135px;
-                          left: 90px;
+                        <form action="modify" name="modify" method="post" enctype="multipart/form-data"
+                            style="display: none;">
+                            <input type="hidden" name="modifyInfo" value="">
+                            <input type="password" placeholder="Hasło" name="accessCode" style="
+                          width: 137px;
+                          left: 88px;
                           position: relative;
+                          border-radius: 0;
                       ">
-                      <button class="modify" type="submit">Modyfikuj</button>
-                    </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n2l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                            <button class="modify" type="submit">Modyfikuj</button>
+                        </form>
+                        <a href="img/books-bg.jpg" data-lightbox="n2l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
-                      <div class="inner_row">
-                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
-                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
-                      </div>
-                      <section id="description" class="window">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                      </section>
-                      <section id="contact" class="window">
-                          <p>Użytkownik: Bejcu</p>
-                          <p>Telefon: 666-666-666</p>
-                          <p> Email: wp@gmail.pl</p>
-                      </section>
-                      <section id="items" class="window">
-                          <p>Chemia</p>
-                          <p>Fizyka</p>
-                          <p>J.angielski</p>
-                      </section>
-                  </article>
-                  <article id="n3" class="book">
+                        <div class="inner_row">
+                            <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                            <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                        </div>
+                        <section id="description" class="window">
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                                consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                        </section>
+                        <section id="contact" class="window">
+                            <p>Użytkownik: Bejcu</p>
+                            <p>Telefon: 666-666-666</p>
+                            <p> Email: wp@gmail.pl</p>
+                        </section>
+                        <section id="items" class="window">
+                            <p>Chemia</p>
+                            <p>Fizyka</p>
+                            <p>J.angielski</p>
+                        </section>
+                    </article>
+                    <article id="n3" class="book">
 
-                    <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
-                      <input type="hidden" name="modifyInfo" value="">
-                      <input type="text" placeholder="AccessCode" name="accessCode" style="
-                          width: 135px;
-                          left: 90px;
+                        <form action="modify" name="modify" method="post" enctype="multipart/form-data"
+                            style="display: none;">
+                            <input type="hidden" name="modifyInfo" value="">
+                            <input type="password" placeholder="Hasło" name="accessCode" style="
+                          width: 137px;
+                          left: 88px;
                           position: relative;
+                          border-radius: 0;
                       ">
-                      <button class="modify" type="submit">Modyfikuj</button>
-                    </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n3l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                            <button class="modify" type="submit">Modyfikuj</button>
+                        </form>
+                        <a href="img/books-bg.jpg" data-lightbox="n3l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
-                      <div class="inner_row">
-                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
-                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
-                      </div>
-                      <section id="description" class="window">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                      </section>
-                      <section id="contact" class="window">
-                          <p>Użytkownik: Bejcu</p>
-                          <p>Telefon: 666-666-666</p>
-                          <p> Email: wp@gmail.pl</p>
-                      </section>
-                      <section id="items" class="window">
-                          <p>Chemia</p>
-                          <p>Fizyka</p>
-                          <p>J.angielski</p>
-                      </section>
-                  </article>
-                  <article id="n4" class="book">
+                        <div class="inner_row">
+                            <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                            <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                        </div>
+                        <section id="description" class="window">
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                                consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                        </section>
+                        <section id="contact" class="window">
+                            <p>Użytkownik: Bejcu</p>
+                            <p>Telefon: 666-666-666</p>
+                            <p> Email: wp@gmail.pl</p>
+                        </section>
+                        <section id="items" class="window">
+                            <p>Chemia</p>
+                            <p>Fizyka</p>
+                            <p>J.angielski</p>
+                        </section>
+                    </article>
+                    <article id="n4" class="book">
 
-                      <form action="modify" name="modify" method="post" enctype="multipart/form-data" style="display: none;">
-                        <input type="hidden" name="modifyInfo" value="">
-                        <input type="text" placeholder="AccessCode" name="accessCode" style="
-                            width: 135px;
-                            left: 90px;
+                        <form action="modify" name="modify" method="post" enctype="multipart/form-data"
+                            style="display: none;">
+                            <input type="hidden" name="modifyInfo" value="">
+                            <input type="password" placeholder="Hasło" name="accessCode" style="
+                            width: 137px;
+                            left: 88px;
                             position: relative;
+                            border-radius: 0;
                         ">
-                        <button class="modify" type="submit">Modyfikuj</button>
-                      </form>
-                      <a href="img/books-bg.jpg" data-lightbox="n5l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
+                            <button class="modify" type="submit">Modyfikuj</button>
+                        </form>
+                        <a href="img/books-bg.jpg" data-lightbox="n5l"><figure><img src="img/books-bg.jpg" alt=""></figure><img></a>
 
-                      <div class="inner_row">
-                          <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
-                          <button onclick="openWindow(event, 'contact')">Kontakt</button>
-                          <button onclick="openWindow(event, 'items')">Przedmioty</button>
-                      </div>
-                      <section id="description" class="window">
-                          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
-                              consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
-                      </section>
-                      <section id="contact" class="window">
-                          <p>Użytkownik: Bejcu</p>
-                          <p>Telefon: 666-666-666</p>
-                          <p> Email: wp@gmail.pl</p>
-                      </section>
-                      <section id="items" class="window">
-                          <p>Chemia</p>
-                          <p>Fizyka</p>
-                          <p>J.angielski</p>
-                      </section>
-                  </article>
+                        <div class="inner_row">
+                            <button id="defaultOpen" onclick="openWindow(event, 'description')">Opis</button>
+                            <button onclick="openWindow(event, 'contact')">Kontakt</button>
+                            <button onclick="openWindow(event, 'items')">Przedmioty</button>
+                        </div>
+                        <section id="description" class="window">
+                            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fugiat commodi sint qui
+                                consectetur soluta consequuntur erisque enim ligula venenatis dola</p>
+                        </section>
+                        <section id="contact" class="window">
+                            <p>Użytkownik: Bejcu</p>
+                            <p>Telefon: 666-666-666</p>
+                            <p> Email: wp@gmail.pl</p>
+                        </section>
+                        <section id="items" class="window">
+                            <p>Chemia</p>
+                            <p>Fizyka</p>
+                            <p>J.angielski</p>
+                        </section>
+                    </article>
                 </div>
             </section>
 
@@ -354,65 +372,131 @@
     </div>
     <script src="http://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
-    </script>
+        </script>
     <script src="js/nouislider.min.js"></script>
     <script src="js/main.js"></script>
     <script src="lib/dist/js/lightbox.js"></script>
     <script src="js/searchController.js"></script>
     <script src="js/showOffers.js"></script>
     <script>
-    <% if( typeof hint !== 'undefined' ){ %>
-       let hint = " <%=hint%> ";
-       alert( hint );
+    <% if (typeof hint !== 'undefined' && typeof type !== 'undefined') { %>
+            let hint = " <%=hint%> ";
+            let searchType = "<%=type%>";
+
+            console.log(searchType);
+
+            let placeB4, placeParent;
+
+            switch (searchType) {
+                case 'byLogin':
+                    placeB4 = '';
+                    placeParent = ".my_offers"
+                    break;
+
+                case 'default':
+                    placeB4 = '';
+                    placeParent = ".offers"
+                    break;
+
+                case 'update_success':
+                    placeB4 = '#add_book_form';
+                    placeParent = ".add_book"
+                    break;
+
+                default:
+                    alert(hint);
+
+            }
+
+            // alert(hint);
+
+            const validationInformation = (hint, parentSelector, insertB4Selector) => {
+                console.log(parentSelector, insertB4Selector);
+                const parentElement = document.querySelector(parentSelector)
+                const errorSpan = document.createElement("span");
+                const errorImg = document.createElement("img");
+                errorImg.src = "img/exclamation-mark.png";
+                errorSpan.classList.add("error");
+                errorSpan.textContent = hint;
+                // "Podany użytkownik nie ma żadnych aktualnych ofert!"
+                // " Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto oferty zawierające niektóre z nich"
+                if (insertB4Selector === '')
+                    parentElement.append(errorSpan)
+
+                else {
+                    const placeToInsertB4 = document.querySelector(insertB4Selector);
+                    parentElement.insertBefore(errorSpan, placeToInsertB4);
+                }
+
+
+                errorSpan.prepend(errorImg);
+            }
+
+            if (typeof placeParent != 'undefined')
+                validationInformation(hint, placeParent, placeB4);
 
     <% } %>
 
-    "use strict";
+            "use strict";
 
-    class Offer {
-      constructor( id, username, num, email, description, grade, subjects, links, titles ){
+        class Offer {
+            constructor(id, username, num, email, description, grade, subjects, links, titles, priceFrom, priceTo) {
 
-        this.id = id,
-        this.username = username,
-        this.num = num,
-        this.email = email,
-        this.description = description,
-        this.class = grade
-        this.subjects = subjects.split(',')
-        this.links = links.split(',')
-        this.titles = titles.split(',')
+                this.id = id,
+                    this.username = username,
+                    this.num = num,
+                    this.email = email,
+                    this.description = description,
+                    this.class = grade,
+                    this.subjects = subjects.split(','),
+                    this.links = links.split(','),
+                    this.titles = titles.split(','),
+                    this.priceFrom = priceFrom,
+                    this.priceTo = priceTo
 
-      }
-    }
+            }
+        }
 
-    let clientSideResults = [];
-    let oneOffer;
+        let clientSideResults = [];
+        let oneOffer;
 
-    <% if( typeof offersToShow != "undefined" ) for (i = 0; i < offersToShow.length ; i++){ %>
+    <% if (typeof offersToShow != "undefined") for (i = 0; i < offersToShow.length; i++) { %>
 
-      oneOffer = new Offer( "<%= offersToShow[i].id %>", "<%= offersToShow[i].username %>", "<%= offersToShow[i].num %>", "<%= offersToShow[i].email %>", "<%= offersToShow[i].description %>",
-                                "<%= offersToShow[i].class %>", "<%= offersToShow[i].subjects %>", "<%= offersToShow[i].links %>", "<%= offersToShow[i].titles %>" );
-      clientSideResults.push( oneOffer );
+            oneOffer = new Offer("<%= offersToShow[i].id %>", "<%= offersToShow[i].username %>", "<%= offersToShow[i].num %>", "<%= offersToShow[i].email %>", "<%= offersToShow[i].description %>",
+                "<%= offersToShow[i].class %>", "<%= offersToShow[i].subjects %>", "<%= offersToShow[i].links %>", "<%= offersToShow[i].titles %>", "<%= offersToShow[i].priceFrom %>", "<%= offersToShow[i].priceTo %>");
+            clientSideResults.push(oneOffer);
 
     <% } %>
 
-    let counter = 0;
-    showOffers(clientSideResults, counter, "first");
-    <% if (typeof type != "undefined"){ %>
-    hideForm(`<%= type %>`)
+            let counter = 0;
+        showOffers(clientSideResults, counter, "first");
+    <% if (typeof type != "undefined") { %>
+            hideForm(`<%= type %>`)
     <% } %>
-    document.getElementById('nextButton').addEventListener('click', function(){
-        cleanPhotos();
-        //alert();
-        counter++;
-        showOffers(clientSideResults, counter, "next");
-    });
-    document.getElementById('prevButton').addEventListener('click', function(){
-        cleanPhotos();
-        //alert();
-        counter--;
-        showOffers(clientSideResults, counter, "prev");
-    });
+        document.getElementById('nextButton').addEventListener('click', function () {
+            cleanPhotos();
+            //alert();
+            counter++;
+            showOffers(clientSideResults, counter, "next");
+        });
+        document.getElementById('prevButton').addEventListener('click', function () {
+            cleanPhotos();
+            //alert();
+            counter--;
+            showOffers(clientSideResults, counter, "prev");
+        });
+    </script>
+    <script>
+        $(function () {
+            var requiredCheckboxes = $(':checkbox[required]');
+            requiredCheckboxes.change(function () {
+                if (requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
 
     </script>
 

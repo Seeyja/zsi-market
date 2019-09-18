@@ -26,7 +26,10 @@ module.exports = function( app ){
       this.links = [];
       this.links.push( foundOffer.link )
       this.titles = [];
-      this.titles.push( foundOffer.title)
+      this.titles.push( foundOffer.title )
+      this.priceFrom = foundOffer.price_from
+      this.priceTo = foundOffer.price_to
+
     }
   }
 
@@ -37,7 +40,7 @@ module.exports = function( app ){
         //console.log( req.body );
 
         let offersToShow = []
-        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, book_type.title, photos.link, offers.id, book_type.class, users.code FROM
+        let sqlOfferSearch = `SELECT users.username, users.num, users.email, offers.description, offers.price_from, offers.price_to, book_type.subject, book_type.title, photos.link, offers.id, book_type.class, users.code FROM
                               offers  INNER JOIN users ON offers.user_id = users.id
                                       INNER JOIN photos ON photos.offer_id = offers.id
                                       INNER JOIN sets ON sets.offer_id = offers.id
@@ -62,7 +65,7 @@ module.exports = function( app ){
                       //offerId: foundModifyOffersResult[0].id
                   }
                   let offerId = foundModifyOffersResult[0].id;
-                  let bookTypes = {}
+                  let bookTypes = {};
 
 
                   //Transformacja kilku obiektow w jeden. Zmiana 2 wlasciwosci na tablice
@@ -104,14 +107,26 @@ module.exports = function( app ){
 
                   console.log(offersToShow[0].subjects);
                   console.log('NEEDit'+offersToShow[0].links);
-
                   console.log(typeof offersToShow[0].links);
 
-                  res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: offersToShow[0].description, keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links} );
+                  res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: offersToShow[0].description,
+                                              keepBookTypes: offersToShow[0].subjects, keepPhotos: offersToShow[0].links,
+                                              keepClass: foundModifyOffersResult[0].class, keepMinPrice: offersToShow[0].priceFrom, keepMaxPrice: offersToShow[0].priceTo} );
               }
 
               else {
-                res.render( 'index', {hint: 'Zły kod!'} )
+                let sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, offers.price_from, offers.price_to, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date, offers.active FROM
+                                                                        offers  INNER JOIN users ON offers.user_id = users.id
+                                                                                INNER JOIN photos ON photos.offer_id = offers.id
+                                                                                INNER JOIN sets ON sets.offer_id = offers.id
+                                                                                INNER JOIN book_type ON book_type.id = sets.book_type_id
+                                                                                WHERE sets.offer_id IN
+                                                                                  (SELECT sets.offer_id FROM sets INNER JOIN book_type ON sets.book_type_id = book_type.id
+                                                                                  WHERE users.username = "${foundModifyOffersResult[0].username}" )
+                                                                                AND photos.active = 1` ;
+                let searchType = 'wrongCode'
+                queryController.findOffers(sqlOffersQuery, req, res, db, req.query.searchList, searchType);
+                // res.render( 'index', {hint: 'Zły kod!'} )
               }
         });//querymodifyresult end
 

@@ -55,7 +55,7 @@ module.exports = function( app ){
 
         console.log('i am here');
 
-        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
+        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, offers.price_from, offers.price_to, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                                 offers  INNER JOIN users ON offers.user_id = users.id
                                         INNER JOIN photos ON photos.offer_id = offers.id
                                         INNER JOIN sets ON sets.offer_id = offers.id
@@ -68,7 +68,7 @@ module.exports = function( app ){
       }
       else {
         let subjectListString = req.query.searchList.replace(/ /gi, '" OR book_type.subject = "');
-        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
+        sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, offers.price_from, offers.price_to, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date FROM
                                 offers  INNER JOIN users ON offers.user_id = users.id
                                         INNER JOIN photos ON photos.offer_id = offers.id
                                         INNER JOIN sets ON sets.offer_id = offers.id
@@ -88,7 +88,7 @@ module.exports = function( app ){
 
       req.query.searchList = undefined;
 
-      sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date, offers.active FROM
+      sqlOffersQuery = `SELECT users.username, users.num, users.email, offers.description, offers.price_from, offers.price_to, book_type.subject, photos.link, offers.id, book_type.class, book_type.title, offers.add_date, offers.active FROM
                                                               offers  INNER JOIN users ON offers.user_id = users.id
                                                                       INNER JOIN photos ON photos.offer_id = offers.id
                                                                       INNER JOIN sets ON sets.offer_id = offers.id
