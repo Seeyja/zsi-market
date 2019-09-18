@@ -15,7 +15,8 @@ module.exports = {
         do{
           code = Math.floor(Math.random()*1000000);
         } while(code < 100000)
-*/      let class = req.body.class;
+*/
+//        let class = req.body.class;
         let userData = {
             username: req.body.login,
             num: req.body.num,
@@ -45,13 +46,19 @@ module.exports = {
         };
         let offerData = {
             description: req.body.description,
-            active: 0,
+            active: 1,
+            price_from: req.body.price_from,
+            price_to: req.body.price_to
         };
+        console.log(offerData);
         let entryCode;
         let setData={}; // Data for set table
         let photoUploadInfo;
 
-        let sqlExistingUser = `SELECT * FROM users WHERE username = "${userData.username}" OR num = "${userData.num}" OR email="${userData.email}"`;
+        let sqlExistingUser = `SELECT * FROM users WHERE
+                                  username = "${userData.username}" OR
+                                  (num = "${userData.num}" AND num != "") OR
+                                  (email="${userData.email}" AND email !="")`;
         let queryExistingUserOut = db.query( sqlExistingUser, ( err, foundUsers ) => {
             if( err ) throw err;
 
@@ -66,7 +73,7 @@ module.exports = {
 
                 });
 
-                res.render( 'index', {hint: `Witaj ${userData.username} ! Ogłoszenie dodane Twoje hasło do zmian w ogłoszeniu: ${userData.code}`} );
+                res.render( 'index', {hint: `Witaj ${userData.username} ! Ogłoszenie dodane Twoje hasło do zmian w ogłoszeniu: ${userData.code}`, type:'newUser'} );
 
             }
             else {
@@ -77,7 +84,7 @@ module.exports = {
                 if( userData.code === entryCode ){
 
                   queryController.insertSetAndOffer( setData, offerData, bookTypes, keepPhotos, req, db )
-                  res.render( 'index', {hint: 'Offer added to existing user'} );
+                  res.render( 'index', {hint: 'Offer added to existing user', type: "correctCode"} );
 
                 }
                 else{
@@ -91,7 +98,7 @@ module.exports = {
                     });
 
                   }
-                  res.render( 'login', {hint: 'Wrong access Code!', keepData: userData, keepDescription: offerData.description, keepBookTypes: bookTypes} );
+                  res.render( 'login', {hint: 'Podałeś złe hasło!', keepData: userData, keepDescription: offerData.description, keepBookTypes: bookTypes, keepClass: req.body.class, type: "wrongCode"} );
 
                 }
 

@@ -14,13 +14,15 @@ class Offer {
     this.links.push( foundOffer.link )
     this.titles = [];
     this.titles.push( foundOffer.title )
+    this.priceFrom = foundOffer.price_from
+    this.priceTo = foundOffer.price_to
 
   }
 }
 
 function insertDefaultPhoto(offerId, db) {
 
-  photoInfo = { offer_id: offerId, link: 'default.jpg' };
+  photoInfo = { offer_id: offerId, link: 'default.jpg', active:1 };
 
   let sqlPhotoIn = 'INSERT INTO photos SET ?';
   let queryPhotoIn = db.query( sqlPhotoIn, photoInfo, (err, sqlPhotoInResult)=>{
@@ -55,7 +57,7 @@ module.exports = {
       setData.offer_id = sqlOffersInResult.insertId;
 
       console.log("WOOOOOOOOOOOOOOOOHOOO");
-      console.log(keepPhotos);
+      console.log(setData.offer_id);
       //insertDefaultPhoto(setData.offer_id);
 
       for ( subject in bookTypes ){
@@ -94,6 +96,7 @@ module.exports = {
 
         photoData.link = req.files[i].filename;
         photoData.offer_id = sqlOffersInResult.insertId;
+        photoData.active = 1;
         console.log(photoData);
 
         const sqlPhotoIn = `INSERT INTO photos SET ?`;
@@ -106,6 +109,7 @@ module.exports = {
   },
 
   findOffers: function(query, req, res, db, requiredSubjectsString, searchType){
+
 
     if ( typeof requiredSubjectsString != "undefined")
         requiredSubjects = requiredSubjectsString.split(' ');
@@ -158,15 +162,16 @@ module.exports = {
           offersToShow.reverse();
 
           if ( offersToShow.length == 0 )
-            res.render( 'index', {offersToShow: offersToShow, type: "login", hint:"Nie masz żadnych aktualnych ofert"} );
+            res.render( 'index', {offersToShow: offersToShow, type: "byLogin", hint:"Nie masz żadnych aktualnych ofert"} );
 
           else
-            res.render( 'index', {offersToShow: offersToShow, type: "login"} );
+            res.render( 'index', {offersToShow: offersToShow, type: "byLogin"} );
 
         }
 
         if ( searchType == "byClass" ) {
 
+          offersToShow.reverse();
           if ( offersToShow.length == 0 )
             res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie mamy aktualnie ofert dla tej klasy"} );
           else
@@ -200,6 +205,8 @@ module.exports = {
 
             if ( confirmedOffersToShow.length == 0 ){
 
+              offersToShow.reverse();
+
               if ( offersToShow.length == 0 )
                 res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych szukane książki."} );
 
@@ -215,6 +222,15 @@ module.exports = {
             }
 
           }
+
+        if ( searchType == "wrongCode"){
+
+            offersToShow.reverse();
+
+            res.render( 'index', {offersToShow: offersToShow, type: "wrongCode", hint:"Podałeś zły kod!"} );
+
+        }
+
 
 
 
@@ -268,7 +284,7 @@ module.exports = {
                   });//Change query end
 
                   let sqlChangeOfferData =  `UPDATE offers
-                                            SET description = '${req.body.description}', active = 0
+                                            SET description = '${req.body.description}', active = 1, price_to='${req.body.price_to}', price_from='${req.body.price_from}'
                                             WHERE id = '${req.body.offerId}'`;
 
                   let queryChangeOfferData = db.query( sqlChangeOfferData, ( err, changeResult ) => {
@@ -334,6 +350,7 @@ module.exports = {
 
                     photoData.link = req.files[i].filename;
                     photoData.offer_id = req.body.offerId;
+                    photoData.active = 1;
                     console.log(photoData);
 
                     const sqlPhotoIn = `INSERT INTO photos SET ?`;
@@ -354,7 +371,7 @@ module.exports = {
                   });
 
 
-                  res.render( 'index', {hint: 'Udało się zmienić ofertę'});
+                  res.render( 'index', {hint: 'Udało się zmienić ofertę', type: "alerto"});
   //  });//upload End
   },
 
