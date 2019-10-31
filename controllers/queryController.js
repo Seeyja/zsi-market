@@ -1,4 +1,6 @@
 // findOffers () - Wyszukuje i pakuje oferty w jedną tablice i przekazuje do res.render()
+const emailController = require('./emailController')
+const moment = require('moment')
 const fs = require('fs');
 class Offer {
   constructor( foundOffer ){
@@ -16,7 +18,7 @@ class Offer {
     this.titles.push( foundOffer.title )
     this.priceFrom = foundOffer.price_from
     this.priceTo = foundOffer.price_to
-
+    this.addDate = moment( new Date(foundOffer.add_date) ).locale('pl').fromNow();
   }
 }
 
@@ -208,10 +210,10 @@ module.exports = {
               offersToShow.reverse();
 
               if ( offersToShow.length == 0 )
-                res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych szukane książki."} );
+                res.render( 'index', {offersToShow: offersToShow, type: "noOffer", hint:"Nie znaleziono ofert zawierajacych szukane książki."} );
 
               else
-                res.render( 'index', {offersToShow: offersToShow, type: "default", hint:"Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto oferty zawierające niektóre z nich"} );
+                res.render( 'index', {offersToShow: offersToShow, type: "defaultNoOff", hint:"Nie znaleziono ofert zawierajacych wszystkie szukane książki. Oto oferty zawierające niektóre z nich"} );
 
             }
 
@@ -227,17 +229,34 @@ module.exports = {
 
             offersToShow.reverse();
 
-            res.render( 'index', {offersToShow: offersToShow, type: "wrongCode", hint:"Podałeś zły kod!"} );
+            res.render( 'index', {offersToShow: offersToShow, type: "wrongCode", hint:"Podałeś złe hasło!"} );
 
         }
 
+        if ( searchType == "logout"){
 
+          offersToShow.reverse();
 
+          res.render( 'index', {offersToShow: offersToShow, type: "logout", hint:"Zostałeś Wylogowany"} );
 
+        }
+        if ( searchType == "login"){
 
+          offersToShow.reverse();
+
+          res.render( 'index', {offersToShow: offersToShow, type: "correctCode", hint:"Zostałeś Wylogowany"} );
+
+        }
+
+        if ( searchType == "all"){
+
+          //offersToShow.reverse();
+
+          res.render( 'index', {offersToShow: offersToShow, type: "all"} );
+
+      }
 
 });},
-
 
   modifyOffer: function( req, res, db ){
 
@@ -247,7 +266,7 @@ module.exports = {
               username: req.body.login,
               num: req.body.num,
               email: req.body.email,
-            //  code: code,
+              code: req.body.password,
           }
           let bookTypes = {
               polish: req.body.polish,
@@ -274,105 +293,147 @@ module.exports = {
           let setData={}; // Data for set table
           let photoData={};
 
-                  let sqlChangeUserData =   `UPDATE users
-                                            SET email = '${userData.email}', num = '${userData.num}'
-                                            WHERE username = '${userData.username}'`;
+          let sendEmail;
+          let sqlChangeUserData;
+          let sqlChangeOfferData;
 
-                  let queryChangeUserData = db.query( sqlChangeUserData, ( err, changeResult ) => {
+          console.log('query-controller----------------------');
+          console.log('SESSION');
+          console.log(req.session);
+          console.log('BODY');
+          console.log(req.body);
+          
+          
+          if(!req.session.pass){
+            res.sendStatus(401);// DO SOMETHING HERE
+          }
+          else{
+
+          
+            const sqlCheckAuth = `SELECT id FROM users WHERE username = "${req.session.username}" AND code = "${req.session.pass}" AND id=${req.session.uid}`;
+            const queryCheckAuth = db.query( sqlCheckAuth, (err, checkAuthResult)=>{
+              if(err) throw err;
+
+              if( req.body.password == '' ){
+                sendEmail = false;
+                sqlChangeUserData =`UPDATE users
+                                    SET email = '${userData.email}', num = '${userData.num}'
+                                    WHERE id = ${checkAuthResult[0].id}`;
+              }
+                          
+              else{
+                sendEmail = true;
+                sqlChangeUserData =`UPDATE users
+                                    SET code = '${req.body.password}', email = '${userData.email}', num = '${userData.num}'
+                                    WHERE id = ${checkAuthResult[0].id}`;
+              }
+              console.log(sqlChangeUserData);
+              
+              let queryChangeUserData = db.query( sqlChangeUserData, ( err, changeResult ) => {
+                if( err ) throw err;
+    
+                if( sendEmail )
+                  emailController.sendEmail(req, res)
+    
+                sqlChangeOfferData =  `UPDATE offers
+                                      SET description = '${req.body.description}', active = 1, price_to='${req.body.price_to}', 
+                                      price_from='${req.body.price_from}' WHERE id = ${req.body.offerId} AND user_id=${checkAuthResult[0].id}`;
+                console.log(sqlChangeOfferData);
+                
+                let queryChangeOfferData = db.query( sqlChangeOfferData, ( err, changeResult ) => {
+                if( err ) throw err;
+                });//Change query end
+    
+              })
+            })
+                        
+            //else res.send("You are too low.")
+
+            let sqlFindEverySubjectInOffer = `SELECT book_type.subject, book_type.id FROM book_type, sets WHERE sets.offer_id = '${req.body.offerId}' AND sets.book_type_id = book_type.id`;
+            let queryFindEverySubjectInOffer = db.query( sqlFindEverySubjectInOffer, ( err, selectSubjectsResult ) => {
+              if( err ) throw err;
+              let subjectsFromQuery = [];
+              let subjectsFromRequest = [];
+              let finalSubjects = [];
+
+              for ( simpleResult of selectSubjectsResult )
+                  subjectsFromQuery.push( simpleResult.subject );
+
+              for ( subject in bookTypes )
+                if( typeof bookTypes[subject] !== 'undefined' ) //Cuz "subject" is always defined
+                  subjectsFromRequest.push( subject );
+
+              //Adding difference
+              for ( subject in bookTypes ){
+                if( typeof bookTypes[subject] !== 'undefined' && !subjectsFromQuery.includes( bookTypes[subject] ) ){
+                  let sqlBookTypeOut = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
+                  let queryBookTypeOut = db.query( sqlBookTypeOut, (err, sqlBookTypeOutResults )=>{
                     if( err ) throw err;
-                    console.log(changeResult);
-                  });//Change query end
 
-                  let sqlChangeOfferData =  `UPDATE offers
-                                            SET description = '${req.body.description}', active = 1, price_to='${req.body.price_to}', price_from='${req.body.price_from}'
-                                            WHERE id = '${req.body.offerId}'`;
+        /*          console.log( sqlBookTypeOut );
+                    //console.log("Strange thing:"); ? bookTypes[subject]??
+                    console.log(subject);
+                    console.log(req.body.class); */
 
-                  let queryChangeOfferData = db.query( sqlChangeOfferData, ( err, changeResult ) => {
-                    if( err ) throw err;
-                  });//Change query end
+                    setData.book_type_id = sqlBookTypeOutResults[0].id;
+                    setData.offer_id = req.body.offerId;
 
-                  let sqlFindEverySubjectInOffer = `SELECT book_type.subject, book_type.id FROM book_type, sets WHERE sets.offer_id = '${req.body.offerId}' AND sets.book_type_id = book_type.id`;
-                  let queryFindEverySubjectInOffer = db.query( sqlFindEverySubjectInOffer, ( err, selectSubjectsResult ) => {
-                    if( err ) throw err;
-                    let subjectsFromQuery = [];
-                    let subjectsFromRequest = [];
-                    let finalSubjects = [];
-
-                    for ( simpleResult of selectSubjectsResult )
-                        subjectsFromQuery.push( simpleResult.subject );
-
-                    for ( subject in bookTypes )
-                      if( typeof bookTypes[subject] !== 'undefined' ) //Cuz "subject" is always defined
-                        subjectsFromRequest.push( subject );
-
-                    //Adding difference
-                    for ( subject in bookTypes ){
-                      if( typeof bookTypes[subject] !== 'undefined' && !subjectsFromQuery.includes( bookTypes[subject] ) ){
-                        let sqlBookTypeOut = `SELECT id FROM book_type WHERE subject = '${subject}' AND class = '${req.body.class}' `;
-                        let queryBookTypeOut = db.query( sqlBookTypeOut, (err, sqlBookTypeOutResults )=>{
-                          if( err ) throw err;
-
-              /*          console.log( sqlBookTypeOut );
-                          //console.log("Strange thing:"); ? bookTypes[subject]??
-                          console.log(subject);
-                          console.log(req.body.class); */
-
-                          setData.book_type_id = sqlBookTypeOutResults[0].id;
-                          setData.offer_id = req.body.offerId;
-
-                          let sqlSetIn = 'INSERT INTO sets SET ?';
-                          let querySetIn = db.query(sqlSetIn, setData, ( err, results )=>{
-                            if(err) throw err;
-                          });
-
-                        });
-
-                      }//ifNotUndefined end
-
-                    }//Subject for end
-
-                    //Deleting difference
-                    for ( subject of selectSubjectsResult ) {
-                      if( !subjectsFromRequest.includes( subject.subject ) ){
-
-                        let sqlDeleteSetPart = `DELETE FROM sets WHERE book_type_id = '${subject.id}' AND offer_id = '${req.body.offerId}'`;
-                        let queryDeleteSetPart = db.query( sqlDeleteSetPart, ( err, deleteSubjectsResult ) => {
-                          if( err ) throw err;
-                        });
-
-                      }
-                    }
-
-                  });//Select Subject end
-
-                  //Adding photos
-                  for ( let i = 0; i < req.files.length; i++ ){
-
-                    photoData.link = req.files[i].filename;
-                    photoData.offer_id = req.body.offerId;
-                    photoData.active = 1;
-                    console.log(photoData);
-
-                    const sqlPhotoIn = `INSERT INTO photos SET ?`;
-                    const queryPhotosIn = db.query( sqlPhotoIn, photoData)
-                  }//Photo for end
-
-                  console.log("ATTENTIONE"+req.body.firstPhoto);
-
-                  let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
-                  let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
-                  if (err)  throw err;
-
-                    if ( photosLengthResult.length > 1 && photosLengthResult[0].link == "default.jpg" ) {
-                      console.log("USUWAM ZDJECIE DOMYSLNE");
-                      deleteDefaultPhoto( req.body.offerId, db);
-                    }
+                    let sqlSetIn = 'INSERT INTO sets SET ?';
+                    let querySetIn = db.query(sqlSetIn, setData, ( err, results )=>{
+                      if(err) throw err;
+                    });
 
                   });
 
+                }//ifNotUndefined end
 
-                  res.render( 'index', {hint: 'Udało się zmienić ofertę', type: "alerto"});
-  //  });//upload End
+              }//Subject for end
+
+              //Deleting difference
+              for ( subject of selectSubjectsResult ) {
+                if( !subjectsFromRequest.includes( subject.subject ) ){
+
+                  let sqlDeleteSetPart = `DELETE FROM sets WHERE book_type_id = '${subject.id}' AND offer_id = '${req.body.offerId}'`;
+                  let queryDeleteSetPart = db.query( sqlDeleteSetPart, ( err, deleteSubjectsResult ) => {
+                    if( err ) throw err;
+                  });
+
+                }
+              }
+
+            });//Select Subject end
+
+            //Adding photos
+            for ( let i = 0; i < req.files.length; i++ ){
+
+              photoData.link = req.files[i].filename;
+              photoData.offer_id = req.body.offerId;
+              photoData.active = 1;
+              console.log(photoData);
+
+              const sqlPhotoIn = `INSERT INTO photos SET ?`;
+              const queryPhotosIn = db.query( sqlPhotoIn, photoData)
+            }//Photo for end
+
+            console.log("ATTENTIONE"+req.body.firstPhoto);
+
+            let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
+            let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
+            if (err)  throw err;
+
+              if ( photosLengthResult.length > 1 && photosLengthResult[0].link == "default.jpg" ) {
+                console.log("USUWAM ZDJECIE DOMYSLNE");
+                deleteDefaultPhoto( req.body.offerId, db);
+              }
+
+          });
+
+          req.session.destroy( ()=>{
+            res.render( 'index', {hint: 'Możesz zobaczyć swoje oferty, wyszukując w prawym górnym rogu strony.', type: "modifiedOffer"});
+          })
+            
+        }
+            //  });//upload End
   },
 
   deletePhoto: function( req, res, db ){
@@ -383,86 +444,130 @@ module.exports = {
         email: offersToShow[0].email,
         offerId: offersToShow[0].id
     }*/
-    let offerId = req.body.offerId
-    console.log("JAAADA "+offerId);
-    let userData = {
-        username: req.body.login,
-        num: req.body.num,
-        email: req.body.email,
-        code: req.body.password,
-        //class: req.body.class,   !
+    if(!req.session.pass){
+      res.redirect('/');
     }
-    let bookTypes = {
-        polish: req.body.polish,
-        english: req.body.english,
-        german: req.body.german,
-        history: req.body.history,
-        entrepreneurship: req.body.entrepreneurship,
-        geography: req.body.geography,
-        biology: req.body.biology,
-        chemistry: req.body.chemistry,
-        physics: req.body.physics,
-        math: req.body.math,
-        safety: req.body.safety,
-        religion: req.body.religion,
-        professionalCourses: req.body.professionalCourses,
-        society: req.body.society,
-        culture: req.body.culture,
-    }
-    let bookTypesArray =[];
+    else{
 
-    console.log("req.body:");
-    console.log(req.body);
+      let offerId = req.body.offerId
+      console.log("JAAADA "+offerId);
+      let userData = {
+          username: req.session.username,
+          num: req.body.num,
+          email: req.body.email,
+          code: req.session.pass,
+          //class: req.body.class,   !
+      }
+      let bookTypes = {
+          polish: req.body.polish,
+          english: req.body.english,
+          german: req.body.german,
+          history: req.body.history,
+          entrepreneurship: req.body.entrepreneurship,
+          geography: req.body.geography,
+          biology: req.body.biology,
+          chemistry: req.body.chemistry,
+          physics: req.body.physics,
+          math: req.body.math,
+          safety: req.body.safety,
+          religion: req.body.religion,
+          professionalCourses: req.body.professionalCourses,
+          society: req.body.society,
+          culture: req.body.culture,
+      }
+      let bookTypesArray =[];
 
-    for ( subject in bookTypes ){
+      console.log("req.body:");
+      console.log(req.body);
 
-      if( typeof bookTypes[subject] !== 'undefined' ){
+      for ( subject in bookTypes ){
 
-        bookTypesArray.push(subject);
+        if( typeof bookTypes[subject] !== 'undefined' ){
 
-      }//ifNotUndefined end
-    }//Subject for end
+          bookTypesArray.push(subject);
+
+        }//ifNotUndefined end
+      }//Subject for end
 
     /*Dont show deleted photo
     for (let i = 0; i < offersToShow[0].links.length; i++)
       if ( offersToShow[0].links[i] == req.body.unlink)
         offersToShow[0].links.splice( i, 1 )
     */
+      const sqlCheckAuth = `SELECT offers.id FROM users, offers WHERE users.id = offers.user_id AND 
+                            users.username = "${req.session.username}" AND users.code = "${req.session.pass}" AND 
+                            users.id=${req.session.uid} AND offers.id=${req.body.offerId}`;
+      const queryCheckAuth = db.query( sqlCheckAuth, (err, checkAuthResult)=>{
+        if(err) throw err;
 
-      let sqlDeletePhoto = `DELETE FROM photos WHERE link = '${req.body.unlink}'`;
-      let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
-        if( err ) throw err;
-        console.log(deletePhotoResult);
-      });
-//----------------------------ADD DEFAULT IF LAST
-      let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
-      let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
+        let sqlDeletePhoto = `DELETE FROM photos WHERE link = '${req.body.unlink}' AND offer_id = '${checkAuthResult[0].id}'`;
+        let queryDeletePhoto = db.query( sqlDeletePhoto, ( err, deletePhotoResult ) => {
+          if( err ) throw err;
+          console.log(deletePhotoResult);
 
-        if (err)  throw err;
+        //----------------------------ADD DEFAULT IF LAST
+        let sqlPhotosLength = `SELECT * FROM photos WHERE offer_id = '${req.body.offerId}' `;
+        let queryPhotosLength = db.query( sqlPhotosLength, ( err, photosLengthResult )=>{
 
-        if ( photosLengthResult.length == 0 ) {
-          insertDefaultPhoto( req.body.offerId, db);
-        }
+          if (err)  throw err;
+
+          if ( photosLengthResult.length == 0 ) {
+            insertDefaultPhoto( req.body.offerId, db);
+          }
 
 
 
-        console.log("WER HERE ZIOMOOOO");
-        console.log(photosLengthResult);
+          console.log("WER HERE ZIOMOOOO");
+          console.log(photosLengthResult);
 
-        let photoArray=[];
-        for (photo of photosLengthResult) {
-          photoArray.push( photo.link )
-        }
+          let photoArray=[];
+          for (photo of photosLengthResult) {
+            photoArray.push( photo.link )
+          }
 
-        res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: req.body.description, keepBookTypes: req.body.searchList, keepPhotos: photoArray} );//photosLengthResult
+          res.render( 'loginModify', {offerId: offerId, keepData: userData, keepDescription: req.body.description, 
+                      keepBookTypes: req.body.searchList, keepPhotos: photoArray, keepClass: req.body.class, keepMinPrice: req.body.priceFrom,
+                      keepMaxPrice: req.body.priceTo, keepExpireDate: req.session.cookie._expires} );//photosLengthResult
 
+        })
+      //console.log(photosLengthResult[0]);
+        });
       })
-    //console.log(photosLengthResult[0]);
+
+      
+    }
 
 
 
 
 //------------------------
+  },
+
+  deleteOffer: function( req, res, db ){
+
+    let userData = {
+      username: req.body.login,
+      code: req.body.random,
+      id: req.body.id
+    }
+
+    const offerId = req.body.offerId;
+
+    const sqlCheckAuth = `SELECT id FROM users WHERE username = "${req.session.username}" AND code = "${req.session.pass}" AND id=${req.session.uid}`;
+    const queryCheckAuth = db.query( sqlCheckAuth, (err, checkAuthResult)=>{
+      if(err) throw err;
+      
+      const sqlDeleteOffer = `DELETE FROM offers WHERE id=${offerId} AND user_id=${checkAuthResult[0].id}`
+      const queryDeletePhoto = db.query( sqlDeleteOffer, ( err, deleteOfferResult )=>{
+        if (err) throw err;
+  
+        res.render( 'index', { hint: "Pomyślnie usunąłeś ofertę", type: 'deleteOffer' })
+      })
+      
+
+    })
+
+
   }
 
 }//Module.Exports end

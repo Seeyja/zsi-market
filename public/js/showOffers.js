@@ -1,19 +1,60 @@
 function showOffers(offersOnClientSide, counter, direction) {
   console.log(offersOnClientSide);
 
-  if (clientSideResults.length && window.location.href.indexOf("books?") > -1) {
+  if (clientSideResults.length) {
+
+    document.getElementById('nextButton').onclick = function () {
+      $('html, body').stop();
+      $('html, body').animate({
+        scrollTop: $(".offers button").offset().top
+      }, 500);
+    }
+    document.getElementById('prevButton').onclick = function () {
+      $('html, body').stop();
+      $('html, body').animate({
+        scrollTop: $(".offers button").offset().top
+      }, 500);
+    }
+
+  }
+
+  if ((clientSideResults.length && window.location.href.indexOf("books?") > -1) || clientSideResults.length && window.location.href.indexOf("login") > -1) {
+
+    document.getElementById('nextButton').onclick = function () {
+      $('html, body').stop();
+      $('html, body').animate({
+        scrollTop: $(".offers button").offset().top
+      }, 500);
+    }
+    document.getElementById('prevButton').onclick = function () {
+      $('html, body').stop();
+      $('html, body').animate({
+        scrollTop: $(".offers button").offset().top
+      }, 500);
+    }
+
+    document.querySelector("main .books h2#offersFound").style.display = "block";
+    document.querySelector("main .books h2#offersFound2").style.display = "none";
+  }
+
+  if ((clientSideResults.length && window.location.href.indexOf("books?") > -1) || clientSideResults.length && window.location.href.indexOf("login") > -1) {
 
     // $(document).ready(function () {
     //   document.querySelector(".my_offers button").click();
     // });
     $(document).ready(function () {
+      $('html, body').stop();
       $('html, body').animate({
-        scrollTop: $("footer").offset().top
-      }, 1000);
+        scrollTop: $(".offers button").offset().top
+      }, 500);
     });
 
-    document.querySelector("main .books h2").style.display = "block";
 
+
+
+    document.querySelector("main .books h2#offersFound").style.display = "block";
+    document.querySelector("main .books h2#offersFound2").style.display = "none";
+    // document.querySelector("main .books h2#offersFound2").style.display = "none";
 
     // document.querySelector(".my_offers button").addEventListener("click", () => {
     //   $('html, body').animate({
@@ -21,6 +62,36 @@ function showOffers(offersOnClientSide, counter, direction) {
     //   }, 1000);
     // })
 
+  }
+
+  if (clientSideResults.length) {
+    document.querySelector("main .books h2#offersFound2").style.display = "block";
+  }
+
+  if (window.location.href.indexOf("login") > -1) {
+    document.querySelector("main .books h2#offersFound2").style.display = "none";
+  }
+
+  if (window.location.href.indexOf("books?searchList") > -1) {
+    document.querySelector("main .books h2#offersFound2").style.display = "none";
+  }
+
+  if (clientSideResults.length && window.location.href.indexOf("login") > -1) {
+    document.querySelector("main .books span").style.display = "block";
+  }
+
+  if (clientSideResults.length && window.location.href.indexOf("books?searchList") > -1 || clientSideResults.length && window.location.href.indexOf("login") > -1) {
+
+    document.querySelector("main .books h2#offersFound2").style.display = "none";
+  }
+
+  if (window.location.href.indexOf("searchList") > -1) {
+    $(document).ready(function () {
+      $('html, body').stop();
+      $('html, body').animate({
+        scrollTop: $(".offers button").offset().top
+      }, 500);
+    });
   }
 
   let seenableOffers = [];
@@ -59,8 +130,8 @@ function showOffers(offersOnClientSide, counter, direction) {
 
     currentOffer = document.getElementById(`n${i}`);
 
-    if (currentOffer.style.visibility == "hidden")
-      currentOffer.style.visibility = "visible"
+    if (currentOffer.style.display == "none")
+      currentOffer.style.display = "block";
 
     currentChildnodes = currentOffer.childNodes;
     currentPhotos = offersOnClientSide[i].links
@@ -96,8 +167,28 @@ function showOffers(offersOnClientSide, counter, direction) {
 
 
 
-    currentChildnodes[7].innerHTML = `<p>${offersOnClientSide[i].description}</p><p style="color: red">Do klasy ${offersOnClientSide[i].class}</p><p>${offersOnClientSide[i].priceFrom} - ${offersOnClientSide[i].priceTo} zł</p>`;
-    currentChildnodes[9].innerHTML = `<p>Użytkownik: ${offersOnClientSide[i].username}</p> <p> Telefon: ${offersOnClientSide[i].num}</p>  <p>Email: ${offersOnClientSide[i].email}`;
+    currentChildnodes[7].innerHTML = `<p>${offersOnClientSide[i].description}</p><p style="color: red">Do klasy ${offersOnClientSide[i].class}</p><p>${offersOnClientSide[i].priceFrom} - ${offersOnClientSide[i].priceTo} zł</p><p>${offersOnClientSide[i].addDate}</p>`;
+    currentChildnodes[9].innerHTML = `<p><span class="user-detail">Użytkownik:</span> ${offersOnClientSide[i].username}</p>`;
+
+
+    const emailP = document.createElement('p');
+    const spanEmail = document.createElement('span');
+    spanEmail.append('Email: ');
+    emailP.append(spanEmail);
+    emailP.append(`${offersOnClientSide[i].email}`);
+
+    const phoneP = document.createElement('p');
+    const spanPhone = document.createElement('span');
+    spanPhone.append('Telefon: ');
+    phoneP.append(spanPhone);
+    phoneP.append(`${offersOnClientSide[i].num}`);
+
+
+    if (offersOnClientSide[i].num.length > 0)
+      currentChildnodes[9].append(phoneP);
+
+    if (offersOnClientSide[i].email.length > 0)
+      currentChildnodes[9].append(emailP);
 
     currentChildnodes[11].innerHTML = "";
     for (title of offersOnClientSide[i].titles) {
@@ -117,7 +208,7 @@ function showOffers(offersOnClientSide, counter, direction) {
     currentChildnodes = currentOffer.childNodes;
 
     //      if (currentChildnodes[4].innerText.includes("Lorem ipsum dolor sit amet consectetur")) {
-    currentOffer.style.visibility = "hidden";
+    currentOffer.style.display = "none";
 
 
   }
@@ -198,4 +289,8 @@ function hideForm(type) {
     document.getElementsByName("modify").forEach((form) => { form.style.display = "inline-block"; })
   }
 
+}
+
+function alertValue() {
+  alert(`document.querySelector('input[name="price_from"]').value`)
 }
