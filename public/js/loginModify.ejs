@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zsi-Market</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:400,700|Saira:400,700&amp;subset=latin-ext"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/nouislider.min.css">
+    <link rel="stylesheet" href="css/dropzone.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <script src="http://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+        </script>
+    <script src="js/dropzone.js"></script>
+    <style>
+        body {
+            position: relative;
+        }
+
+        main .add_book {
+            border-bottom: 0px solid #b1b1b1;
+        }
+
+        main .add_book h2+form {
+            border-bottom: 1px solid #b1b1b1;
+        }
+
+        main {
+            min-height: 80vh;
+        }
+
+        button#logout {
+            width: 120px;
+            margin-top: 0px;
+            padding: 10px 20px;
+            border: 1px solid black;
+            background-color: #555;
+            color: white;
+        }
+
+        div.center {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="clearfix">
+            <a href="/"><figure class="logo"><picture><source media="(max-width: 640px)" srcset="img/logo-mobile.png"><img src="img/logo.png" alt="logo"></picture></figure></a>
+            <nav>
+                <ul>
+                    <!-- <li><a href="#"><i class="fas fa-star"></i>Obserwowane</a></li> -->
+                    <!-- <li><i class="fas fa-star"></i>
+                        
+                    </li> -->
+                </ul>
+            </nav>
+
+
+            <!-- <form class="my_offers" method="get" action="books">
+                <span class="info"><img  alt="Wskazówka" title="Porada" src="img/advice.png"></img>Wprowadź nazwę by wyświetlić swoje aktualne oferty.</span>
+                <input maxlength="15" pattern="\S+" required type="text" placeholder="Użytkownik" name="login">
+                <button onclick="findSubjects()" type="submit">Moje oferty</button>
+            </form> -->
+
+            <div id="demo">"Koniec sesji za: "</div>
+
+
+        </header>
+        <main>
+            <section class="add_book">
+                <h2>Zmodyfikuj ofertę</h2>
+                <span class="validate"></span>
+                <form id="modifyForm" name="mainForm" autocomplete="off" method="post" enctype="multipart/form-data"
+                    action="sendmodification" novalidate>
+
+                    <!-- onsubmit="return validateForm()" -->
+
+                    <div class="row">
+                        <input type="text" placeholder="Login" name="loginDisabled" disabled
+                            value="<%= keepData.username %>">
+                        <input placeholder="Login" name="login" type="hidden" value="<%= keepData.username %>">
+                        <input disabled pattern="\S+" required type="password" placeholder="Hasło" name="password">
+                        <input type="hidden" name="offerId" value="<%= offerId %>">
+                        <select required name="class">
+                            <option value="">Do klasy</option>
+                            <option value="1">1 - Pierwszej</option>
+                            <option value="2">2 - Drugiej</option>
+                            <option value="3">3 - Trzeciej</option>
+                            <option value="4">4 - Czwartej</option>
+                        </select>
+
+                        <input pattern="[0-9]{3}[0-9]{3}[0-9]{3}|[0-9]{3}-[0-9]{3}-[0-9]{3}" required type="tel"
+                            placeholder="Telefon" name="num" value="<%= keepData.num %>">
+                        <input required type="email" placeholder="Email" autocomplete="user-password" name="email"
+                            value="<%= keepData.email %>">
+                    </div>
+                    <div class="row clearfix">
+                        <textarea required pattern="\S+" minlength="10" maxlength="150" placeholder="Opis oferty"
+                            rows="6" name="description"><%= keepDescription %></textarea>
+                        <fieldset name="book_types">
+                            <legend>Wybierz przedmioty</legend>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="polish"><span>Język polski</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="english"><span>Język angielski</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="german"><span>Język niemiecki</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="history"><span>Historia</label>
+                                <label><input class="items_checkbox animationfix" type="checkbox" name="entrepreneurship" ><span>P.przedsiębiorczości</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="geography"><span>Geografia</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="biology"><span>Biologia</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="chemistry"><span>Chemia</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="physics"><span>Fizyka</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="math"><span>Matematyka</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="safety"><span>EDB</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="religion"><span>Religia</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="professionalCourses"><span>Przedmioty zawodowe</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="society"><span>WOS</span></label>
+                            <label><input class="items_checkbox animationfix" type="checkbox"
+                                    name="culture"><span>WOK</span></label>
+                        </fieldset>
+                        <span class="price">Cena za książkę</span>
+                        <div class="inner_row">
+                            <span style="display: none;" class="price2">Określ cenę</span>
+                            <div id="html5"></div>
+                            <input name="price_from" type="number" id="input-select" min="0" max="500" step="1"
+                                id="input-number">
+                            <input name="price_to" type="number" min="0" max="500" step="1" id="input-number">
+
+                            <!-- <input type="file" name="files" id="file" data-multiple-caption="{count} zdjęcia wybrane"
+                                multiple />
+                            <label for="file"><span>Dodaj zdjęcia</span></label> -->
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div id="myDropzone" class="dropzone"></div>
+                        <button id="passwordButton" type="button" style="margin-right: 20px;">Zmień hasło</button>
+                        <button id="deleteOfferButton" type="button" style="margin-right: 20px;">Usuń ofertę</button>
+                        <button id="addOfferButton" type="submit">Zmodyfikuj ofertę</button>
+                    </div>
+                </form>
+                <div class="center">
+                    <form method="get" action="logout">
+                        <button id="logout">Wyloguj</button>
+                    </form>
+                </div>
+
+                <div class="row clearfix">
+                    <% %>
+                        <% for( one of keepPhotos){ %>
+                    <%    if( one != "default.jpg" ){ %>
+                    <form class="deleteForm" action="deletePhoto" method="post" enctype="multipart/form-data">
+                        <div class="imgFrame">
+                            <img target="_blank" src="uploads/<%= one %>" class="linkPhoto clearfix"></img>
+                        </div>
+
+                        <input type="hidden" name="unlink" value="<%= one %>">
+                        <input type="hidden" id="loginDel" name="login" value="">
+                        <input type="hidden" id="classDel" name="class" value="">
+                        <input type="hidden" id="numberDel" name="num">
+                        <input type="hidden" id="emailDel" name="email">
+                        <input type="hidden" id="descriptionDel" name="description">
+                        <input type="hidden" id="offerIdDel" name="offerId">
+                        <input type="hidden" id="priceFromDel" name="priceFrom">
+                        <input type="hidden" id="priceToDel" name="priceTo">
+                        <input id="process" type="hidden" name="searchList" value="">
+
+                        <button id="submitDeleteBtn" class='delete' type="submit">Usuń zdjęcie</button>
+                    </form>
+                    <% }} %>
+                </div>
+
+
+            </section>
+
+            <section style="display: none;" class="select_category">
+                <h2>Jakie książki Cię interesują?</h2>
+                <figure class="category"><img src="img/poland.png">
+                    <figcaption>J.polski</figcaption>
+                </figure>
+                <figure class="category"><img src="img/england.png" alt="">
+                    <figcaption>Język.angielski</figcaption>
+                </figure>
+                <figure class="category"><img src="img/germany.png" alt="">
+                    <figcaption>J.niemiecki</figcaption>
+                </figure>
+                <figure class="category"><img src="img/history.png" alt="">
+                    <figcaption>Historia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/entrepreneurship.png" alt="">
+                    <figcaption>P.przedsiębiorczości</figcaption>
+                </figure>
+                <figure class="category"><img src="img/geography.png" alt="">
+                    <figcaption>Geografia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/biology.png" alt="">
+                    <figcaption>Biologia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/chemistry.png" alt="">
+                    <figcaption>Chemia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/physics.png" alt="">
+                    <figcaption>Fizyka</figcaption>
+                </figure>
+                <figure class="category"><img src="img/maths.png" alt="">
+                    <figcaption>Matematyka</figcaption>
+                </figure>
+                <figure class="category"><img src="img/safety.png" alt="">
+                    <figcaption>EDB</figcaption>
+                </figure>
+                <figure class="category"><img src="img/religion.png" alt="">
+                    <figcaption>Religia</figcaption>
+                </figure>
+                <figure class="category"><img src="img/it.png" alt="">
+                    <figcaption>Przedmioty zawodowe</figcaption>
+                </figure>
+                <figure class="category"><img src="img/society.png" alt="">
+                    <figcaption>WOS</figcaption>
+                </figure>
+                <figure class="category"><img src="img/culture.png" alt="">
+                    <figcaption>WOK</figcaption>
+                </figure>
+            </section>
+            <section style="display: none" class="books">
+                <h2>Wybierz coś dla siebie</h2>
+                <div class="row">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p> 2019 &#169; Wszelkie prawa zastrzeżone. Support:
+                <a href="https://github.com/Seeyja/zsi-market/graphs/contributors" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </p>
+        </footer>
+
+        <div id="valuation_window" class="valuation-window-back" class="pagination">
+
+            <div id="offer_details2" class="valuation-window">
+                <div class="offer-details-close">
+                    <a href="javascript:closeValuationWindow()">&#10006;</a>
+                </div>
+
+                <h5>Czy chcesz usunąc ofertę?</h5>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, fuga neque suscipit
+                    sequi
+                    aliquam atque alias? Voluptatum, cum odit praesentium eos repellendus, corrupti harum obcaecati
+                    amet
+                    ad
+                    incidunt animi?</p>
+
+                <form action="deleteOffer" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="offerId" value="<%= offerId %>">
+                    <button type="submit">Tak</button>
+
+                </form>
+
+
+                <a href="javascript:closeValuationWindow()">Zamknij</a>
+
+            </div>
+
+        </div>
+
+        <div id="valuation_window2" class="valuation-window-back" class="pagination">
+
+            <div id="offer_details3" class="valuation-window">
+                <div class="offer-details-close">
+                    <a href="javascript:closeValuationWindow2()">&#10006;</a>
+                </div>
+
+                <h5>Czy chcesz usunąc ofertę?</h5>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, fuga neque suscipit
+                    sequi
+                    aliquam atque alias? Voluptatum, cum odit praesentium eos repellendus, corrupti harum obcaecati
+                    amet
+                    ad
+                    incidunt animi?</p>
+
+                <form action="deleteOffer" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="offerId" value="<%= offerId %>">
+                    <button type="submit">Tak</button>
+
+                </form>
+
+
+                <a href="javascript:closeValuationWindow2()">Zamknij</a>
+
+            </div>
+
+        </div>
+
+        <div id="valuation_window3" class="valuation-window-back" class="pagination">
+
+            <div id="offer_details4" class="valuation-window">
+                <div class="offer-details-close">
+                    <a href="javascript:closeValuationWindow3()">&#10006;</a>
+                </div>
+
+                <h5>Czy chcesz usunąc ofertę?</h5>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil consequuntur, fuga neque suscipit
+                    sequi
+                    aliquam atque alias? Voluptatum, cum odit praesentium eos repellendus, corrupti harum obcaecati
+                    amet
+                    ad
+                    incidunt animi?</p>
+
+                <a href="javascript:closeValuationWindow3()">Zamknij</a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="js/searchController.js"></script>
+    <script src="js/nouislider.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/timer.js"></script>
+
+    <script>
+    <% if (typeof hint !== 'undefined') { %>
+            let hint = " <%=hint%> ";
+            alert(hint);
+
+    <% } %>
+    <%
+            console.log("I AM GONNA CLEAN THIS RLY");
+        console.log(typeof "keepBookTypes");
+
+        let arrayFromString;
+        if (typeof keepBookTypes == "string")
+            arrayFromString = keepBookTypes.split(' ');
+        else
+            arrayFromString = keepBookTypes;
+
+        if (typeof arrayFromString !== "undefined") {
+            for (subject of arrayFromString) {
+                if (typeof subject !== 'undefined') {
+                    console.log(subject);
+        %>
+                        document.getElementsByName('<%=subject%>')[0].checked = true;
+        <%
+        }//end if undefined
+            }//end for in
+        }//end
+    %>
+
+            document.getElementsByName('price_from')[0].value = <%=keepMinPrice %>;
+        document.getElementsByName('price_to')[0].value = <%=keepMaxPrice %>;
+
+        let classChanger = document.getElementsByName('class')[0].childNodes[<%= keepClass * 2 + 1 %>];
+        classChanger.setAttribute("selected", "selected");
+
+        function getAndSetData() {
+
+            document.getElementsByName('class').forEach(single => { single.value = document.getElementsByName('class')[0].value; })
+            document.getElementsByName('num').forEach(single => { single.value = document.getElementsByName('num')[0].value; })
+            document.getElementsByName('email').forEach(single => { single.value = document.getElementsByName('email')[0].value; })
+            document.getElementsByName('description').forEach(single => { single.value = document.getElementsByName('description')[0].value; })
+            document.getElementsByName('offerId').forEach(single => { single.value = document.getElementsByName('offerId')[0].value; })
+            document.getElementsByName('priceTo').forEach(single => { single.value = document.getElementsByName('price_to')[0].value; })
+            document.getElementsByName('priceFrom').forEach(single => { single.value = document.getElementsByName('price_from')[0].value; })
+            //document.getElementsByName('process').forEach( single => {single.value = document.getElementById('process2').value;
+
+        }
+        getAndSetData();
+        findSelectedSubjects();
+
+
+
+        // let minPriceChanger = document.getElementsByName('price_from')[0].childNodes[<%= keepMaxPrice * 2 + 1 %>];
+        // let maxPriceChanger = document.getElementsByName('price_to')[0].childNodes[<%= keepMinPrice * 2 + 1 %>];
+        // console.log( maxPriceChanger = document.getElementsByName('price_to')[0].childNodes )
+        // minPriceChanger.setAttribute("selected", "selected");
+
+        const passwordButton = document.querySelector("#passwordButton");
+
+        function enablePassword() {
+
+            const passInput = document.getElementsByName('password')[0];
+            passInput.removeAttribute("disabled");
+
+        }
+
+        passwordButton.addEventListener("click", enablePassword);
+
+        const deleteOfferButton = document.querySelector("#deleteOfferButton");
+        deleteOfferButton.addEventListener("click", () => showValuationWindow2("Usuwanie oferty", `<p>Czy na pewno chcesz kontynuować?</p><p class="emailInfo">Zmiany których dokonasz nie mogą zostać odwrócone</p>`));
+
+        /*-------------------- DROPZONE ----------------*/
+        Dropzone.options.myDropzone = {
+            url: 'sendModification',
+            paramName: function () { return 'file'; },
+            //autoDiscover: false,
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 6,
+            maxFiles: 6,
+            maxFilesize: 5,
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            timeout: 180000,
+            init: function () {
+                dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
+
+                // for Dropzone to process the queue (instead of default form behavior):
+                document.querySelector("#addOfferButton").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Make sure that the form isn't actually being sent.
+
+                    const errorMessage = document.querySelector(".add_book span.validate");
+                    const errorImage = `<img src="img/exclamation-mark.png">`;
+
+
+                    let loginInputValue = document.forms["mainForm"]["login"].value;
+                    let passwordInputValue = document.forms["mainForm"]["password"].value;
+                    let classInputValue = document.forms["mainForm"]["class"].value;
+                    let telInputValue = document.forms["mainForm"]["num"].value;
+                    let emailInputValue = document.forms["mainForm"]["email"].value;
+                    let textareaInputValue = document.forms["mainForm"]["description"].value.replace(/[\r\n]+/gm, "");
+                    document.forms["mainForm"]["description"].value = textareaInputValue;
+                    const checkboxChecked = $("input[type=checkbox]:checked").length;
+
+                    const ruleLogin = /^[0-9a-zA-Z]+$/;
+                    const rulePhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/;
+                    const ruleEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+                    if (!loginInputValue.match(ruleLogin)) {
+                        errorMessage.innerHTML = `${errorImage}Wprowadź tylko znaki alfanumeryczne!`;
+                        document.forms["mainForm"]["login"].focus();
+                        return false;
+                    } else if (loginInputValue.length > 15) {
+                        errorMessage.innerHTML = `${errorImage}Maksymalna długość nazwy użytkownika to 15 znaków!`;
+                        document.forms["mainForm"]["login"].focus();
+                        return false;
+                    } else if ((passwordInputValue.indexOf(' ') !== -1 || passwordInputValue == "") && document.forms["mainForm"]["password"].disabled == false) {
+                        document.forms["mainForm"]["password"].value = "";
+                        errorMessage.innerHTML = `${errorImage}Wypełnij pole z hasłem! Nie może zawierać spacji!`;
+                        document.forms["mainForm"]["password"].focus();
+                        return false;
+                    } else if (classInputValue == "") {
+                        document.forms["mainForm"]["class"].required = true;
+                        errorMessage.innerHTML = `${errorImage}Wybierz klasę!`;
+                        document.forms["mainForm"]["class"].focus();
+                        return false;
+                    } else if ((!telInputValue.match(rulePhone) || telInputValue == "") && emailInputValue == "") {
+                        errorMessage.innerHTML = `${errorImage}Podaj numer w poprawnym formacie!`;
+                        document.forms["mainForm"]["num"].focus();
+                        return false;
+                    } else if (!emailInputValue.match(ruleEmail) && telInputValue == "") {
+                        errorMessage.innerHTML = `${errorImage}Podaj adres email w poprawnym formacie!`;
+                        document.forms["mainForm"]["email"].focus();
+                        return false;
+                    } else if (textareaInputValue.length < 10) {
+                        errorMessage.innerHTML = `${errorImage}Wypełnij pole z opisem! Powinno zawierać minimum 10 znaków!`;
+                        document.forms["mainForm"]["description"].focus();
+                        return false;
+                    } else if (textareaInputValue.length > 150) {
+                        errorMessage.innerHTML = `${errorImage}Opis może zawierać maksymalnie 150 znaków!`;
+                        document.forms["mainForm"]["description"].focus();
+                        return false;
+                    } else if (!checkboxChecked) {
+                        errorMessage.innerHTML = `${errorImage}Proszę zaznaczyć przynajmniej jeden przedmiot!`;
+                        return false;
+                    }
+
+                    if (dzClosure.files.length > 0)
+                        dzClosure.processQueue()
+
+                    else
+                        dzClosure._uploadData([{ upload: { filename: '' } }], [{ filename: '', name: '', data: new Blob() }]);
+
+
+                });
+
+
+
+                this.on("success", function (file) {
+                    console.log(file);
+
+                    showValuationWindow3('Zmodyfikowano ofertę', '<p>Udało Ci się zmienić dane ogłoszenia</p><p class="emailInfo">Możesz dodawać nowe oferty po zaznaczeniu "Mam już konto" na stronie głównej.</p>');
+                    // $(".add_book form :input[name]").val("");
+                    // $('input[type=checkbox]:checked').prop('checked', false);
+                });
+
+                // send all the form data along with the files:
+                this.on("sendingmultiple", function (data, xhr, formData) {
+
+                    document.querySelectorAll('.dz-processing').forEach((one) => {
+                        one.classList.remove('dz-complete');
+                    })
+
+                    document.querySelectorAll('.dz-default .dz-progress .dz-upload span').forEach((one) => {
+                        one.style('width: 0%; visibility: none;');
+                    })
+
+                    // var $zmiana = $('input[type=checkbox]');
+
+                    // for (let i = 0; i <= $zmiana.length; i++) {
+                    //     $zmiana[i].val(undefined);
+                    // }
+
+
+
+                    $(":input[name]", $(".add_book form#modifyForm")).each(function () {
+                        console.log(this.checked);
+                        if (this.type == "checkbox") {
+                            if (this.checked)
+                                formData.append(this.name, $(':input[name=' + this.name + ']', $(".add_book form#modifyForm")).val());
+                        }
+                        else
+                            formData.append(this.name, $(':input[name=' + this.name + ']', $(".add_book form#modifyForm")).val());
+                    });
+
+                });
+
+                this.on("error", (files, errorMessage) => {
+
+                    if (`Unauthorized` === errorMessage) {
+
+                        showValuationWindow3('Sesja wygasła', 'Zaloguj się ponownie!');
+
+                        $.each(dzClosure.files, function (i, file) {
+                            file.status = Dropzone.QUEUED
+                        });
+                        document.querySelectorAll('.dz-processing').forEach((one) => {
+                            one.classList.remove('dz-error', 'dz-remove', 'dz-complete');
+                        })
+
+                    }
+
+                })
+
+            }
+        }//DropzoneEnd
+        console.log("<%=keepExpireDate%>");
+        showExpireDate("<%=keepExpireDate%>")
+        
+    </script>
+
+    <script>
+
+
+        $(function () {
+            var requiredCheckboxes = $(':checkbox');
+            requiredCheckboxes.change(function () {
+                if (requiredCheckboxes.is(':checked')) {
+                    requiredCheckboxes.removeAttr('required');
+                } else {
+                    requiredCheckboxes.attr('required', 'required');
+                }
+            });
+        });
+
+    </script>
+
+
+</body>
+
+</html>
