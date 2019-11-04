@@ -13,6 +13,6 @@ www.sellfast.pl
 
 ## Authors
 
-* **Norbert Szpakowski**
-* **Sebastian Tomaszkiewicz**
+* **Norbert Szpakowski** - Backend
+* **Sebastian Tomaszkiewicz** - Frontend
 
