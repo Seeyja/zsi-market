@@ -4,7 +4,7 @@ I wanted to make a few lives easier by developing advertising service for studen
 among schools in order to sell all the coursebooks.
 
 You can check it there: 
-* www.sellfast.pl
+www.sellfast.pl
 
 ## Built With
 
